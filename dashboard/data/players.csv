@@ -1,0 +1,241 @@
+player,name,team,team_name,conference,tier,fga,fg_pct,fta,ft_pct
+0001,Player 0001,100,Team 01,Conference A,Low volume,54,0.3519,16,0.5625
+0002,Player 0002,100,Team 01,Conference A,Regular,195,0.3436,78,0.5769
+0003,Player 0003,100,Team 01,Conference A,Low volume,87,0.4943,60,0.6833
+0004,Player 0004,100,Team 01,Conference A,High volume,418,0.4378,162,0.858
+0005,Player 0005,100,Team 01,Conference A,Low volume,44,0.4773,28,0.75
+0006,Player 0006,100,Team 01,Conference A,Regular,179,0.5363,64,0.6875
+0007,Player 0007,100,Team 01,Conference A,Low volume,88,0.375,52,0.8269
+0008,Player 0008,100,Team 01,Conference A,Regular,150,0.48,82,0.8293
+0009,Player 0009,100,Team 01,Conference A,Regular,252,0.4524,110,0.5909
+0010,Player 0010,100,Team 01,Conference A,High volume,299,0.3946,112,0.8036
+0011,Player 0011,101,Team 02,Conference B,Regular,158,0.4494,74,0.7703
+0012,Player 0012,101,Team 02,Conference B,Low volume,107,0.4019,42,0.4286
+0013,Player 0013,101,Team 02,Conference B,Low volume,53,0.4906,38,0.5263
+0014,Player 0014,101,Team 02,Conference B,Low volume,98,0.4082,46,0.913
+0015,Player 0015,101,Team 02,Conference B,Regular,183,0.3115,66,0.5909
+0016,Player 0016,101,Team 02,Conference B,Low volume,102,0.402,58,0.6552
+0017,Player 0017,101,Team 02,Conference B,Low volume,48,0.3542,34,0.8235
+0018,Player 0018,101,Team 02,Conference B,High volume,291,0.4983,120,0.6
+0019,Player 0019,101,Team 02,Conference B,High volume,315,0.5079,106,0.6698
+0020,Player 0020,101,Team 02,Conference B,Regular,197,0.5482,68,0.5588
+0021,Player 0021,102,Team 03,Conference C,Regular,136,0.5294,56,0.6964
+0022,Player 0022,102,Team 03,Conference C,Regular,150,0.5733,64,0.7812
+0023,Player 0023,102,Team 03,Conference C,High volume,345,0.4696,138,0.8188
+0024,Player 0024,102,Team 03,Conference C,Low volume,52,0.3269,30,0.7333
+0025,Player 0025,102,Team 03,Conference C,High volume,352,0.392,124,0.5806
+0026,Player 0026,102,Team 03,Conference C,Low volume,79,0.6582,44,0.6591
+0027,Player 0027,102,Team 03,Conference C,Low volume,89,0.5281,46,0.7609
+0028,Player 0028,102,Team 03,Conference C,Low volume,93,0.4624,50,0.74
+0029,Player 0029,102,Team 03,Conference C,Regular,122,0.4508,58,0.5862
+0030,Player 0030,102,Team 03,Conference C,Low volume,90,0.5889,36,0.5556
+0031,Player 0031,103,Team 04,Conference A,Regular,175,0.52,82,0.7805
+0032,Player 0032,103,Team 04,Conference A,High volume,392,0.4184,128,0.7656
+0033,Player 0033,103,Team 04,Conference A,Regular,158,0.4304,66,0.8182
+0034,Player 0034,103,Team 04,Conference A,Low volume,52,0.4615,26,0.8077
+0035,Player 0035,103,Team 04,Conference A,High volume,258,0.4264,98,0.8571
+0036,Player 0036,103,Team 04,Conference A,Low volume,102,0.5098,44,0.7273
+0037,Player 0037,103,Team 04,Conference A,Low volume,48,0.4583,34,0.8235
+0038,Player 0038,103,Team 04,Conference A,Low volume,43,0.5116,30,0.8
+0039,Player 0039,103,Team 04,Conference A,Regular,241,0.4813,100,0.61
+0040,Player 0040,103,Team 04,Conference A,Regular,240,0.3708,90,0.5667
+0041,Player 0041,104,Team 05,Conference B,Regular,159,0.434,74,0.7703
+0042,Player 0042,104,Team 05,Conference B,Regular,185,0.4324,80,0.825
+0043,Player 0043,104,Team 05,Conference B,High volume,369,0.4661,152,0.6974
+0044,Player 0044,104,Team 05,Conference B,High volume,395,0.4076,150,0.8267
+0045,Player 0045,104,Team 05,Conference B,Low volume,51,0.5098,36,0.6389
+0046,Player 0046,104,Team 05,Conference B,High volume,254,0.5079,88,0.5114
+0047,Player 0047,104,Team 05,Conference B,High volume,396,0.4646,146,0.6781
+0048,Player 0048,104,Team 05,Conference B,High volume,385,0.5091,140,0.6786
+0049,Player 0049,104,Team 05,Conference B,High volume,260,0.4423,100,0.73
+0050,Player 0050,104,Team 05,Conference B,Regular,110,0.3909,56,0.7143
+0051,Player 0051,105,Team 06,Conference C,Low volume,73,0.4932,32,0.75
+0052,Player 0052,105,Team 06,Conference C,Low volume,32,0.625,14,0.9286
+0053,Player 0053,105,Team 06,Conference C,Low volume,32,0.5,18,0.7222
+0054,Player 0054,105,Team 06,Conference C,Regular,112,0.3839,50,0.8
+0055,Player 0055,105,Team 06,Conference C,Low volume,105,0.5619,58,0.7759
+0056,Player 0056,105,Team 06,Conference C,Regular,241,0.4896,96,0.9271
+0057,Player 0057,105,Team 06,Conference C,Low volume,34,0.5588,24,0.75
+0058,Player 0058,105,Team 06,Conference C,Low volume,94,0.383,44,0.6136
+0059,Player 0059,105,Team 06,Conference C,High volume,262,0.5802,106,0.6887
+0060,Player 0060,105,Team 06,Conference C,Regular,173,0.3988,76,0.6447
+0061,Player 0061,106,Team 07,Conference A,Low volume,41,0.5122,28,0.4643
+0062,Player 0062,106,Team 07,Conference A,Low volume,74,0.3784,34,0.5882
+0063,Player 0063,106,Team 07,Conference A,Low volume,38,0.3947,28,0.75
+0064,Player 0064,106,Team 07,Conference A,Regular,225,0.44,112,0.6071
+0065,Player 0065,106,Team 07,Conference A,Regular,230,0.5217,110,0.7
+0066,Player 0066,106,Team 07,Conference A,Regular,207,0.372,72,0.5278
+0067,Player 0067,106,Team 07,Conference A,Low volume,37,0.4595,16,0.5625
+0068,Player 0068,106,Team 07,Conference A,Regular,137,0.3869,54,0.6296
+0069,Player 0069,106,Team 07,Conference A,Low volume,30,0.6,24,0.75
+0070,Player 0070,106,Team 07,Conference A,Low volume,81,0.5309,50,0.82
+0071,Player 0071,107,Team 08,Conference B,High volume,311,0.5209,128,0.6797
+0072,Player 0072,107,Team 08,Conference B,Low volume,57,0.4386,30,0.9
+0073,Player 0073,107,Team 08,Conference B,Regular,117,0.5043,66,0.7576
+0074,Player 0074,107,Team 08,Conference B,Regular,184,0.5,92,0.7717
+0075,Player 0075,107,Team 08,Conference B,Regular,108,0.6019,54,0.6667
+0076,Player 0076,107,Team 08,Conference B,High volume,284,0.4472,114,0.7807
+0077,Player 0077,107,Team 08,Conference B,Regular,116,0.4741,50,0.74
+0078,Player 0078,107,Team 08,Conference B,Regular,185,0.5081,94,0.6489
+0079,Player 0079,107,Team 08,Conference B,Low volume,53,0.4906,32,0.6875
+0080,Player 0080,107,Team 08,Conference B,Regular,114,0.4561,48,0.7292
+0081,Player 0081,108,Team 09,Conference C,Low volume,32,0.4062,14,0.8571
+0082,Player 0082,108,Team 09,Conference C,Regular,247,0.5182,92,0.7826
+0083,Player 0083,108,Team 09,Conference C,Low volume,90,0.5667,42,0.8571
+0084,Player 0084,108,Team 09,Conference C,Low volume,67,0.5075,44,0.75
+0085,Player 0085,108,Team 09,Conference C,Low volume,34,0.2353,16,0.6875
+0086,Player 0086,108,Team 09,Conference C,Low volume,58,0.4138,24,0.7917
+0087,Player 0087,108,Team 09,Conference C,Low volume,107,0.5327,42,0.8571
+0088,Player 0088,108,Team 09,Conference C,Low volume,105,0.5524,42,0.6429
+0089,Player 0089,108,Team 09,Conference C,High volume,264,0.3939,86,0.7093
+0090,Player 0090,108,Team 09,Conference C,Low volume,55,0.5091,40,0.775
+0091,Player 0091,109,Team 10,Conference A,High volume,297,0.4276,146,0.726
+0092,Player 0092,109,Team 10,Conference A,Low volume,43,0.4884,30,0.6
+0093,Player 0093,109,Team 10,Conference A,High volume,286,0.4545,110,0.5545
+0094,Player 0094,109,Team 10,Conference A,Low volume,104,0.5288,50,0.76
+0095,Player 0095,109,Team 10,Conference A,Low volume,52,0.5,28,0.6429
+0096,Player 0096,109,Team 10,Conference A,Regular,164,0.5976,82,0.7927
+0097,Player 0097,109,Team 10,Conference A,High volume,465,0.4194,182,0.6154
+0098,Player 0098,109,Team 10,Conference A,Regular,129,0.3333,54,0.537
+0099,Player 0099,109,Team 10,Conference A,Low volume,42,0.4762,30,0.7
+0100,Player 0100,109,Team 10,Conference A,High volume,426,0.392,156,0.6346
+0101,Player 0101,110,Team 11,Conference B,Regular,232,0.5259,92,0.8261
+0102,Player 0102,110,Team 11,Conference B,Regular,238,0.4832,92,0.7609
+0103,Player 0103,110,Team 11,Conference B,High volume,307,0.4625,102,0.7647
+0104,Player 0104,110,Team 11,Conference B,Low volume,39,0.359,22,0.6364
+0105,Player 0105,110,Team 11,Conference B,Low volume,84,0.5833,32,0.625
+0106,Player 0106,110,Team 11,Conference B,Low volume,72,0.4028,36,0.6944
+0107,Player 0107,110,Team 11,Conference B,Regular,130,0.4692,76,0.6184
+0108,Player 0108,110,Team 11,Conference B,High volume,320,0.4875,128,0.7422
+0109,Player 0109,110,Team 11,Conference B,Low volume,50,0.5,24,0.6667
+0110,Player 0110,110,Team 11,Conference B,Low volume,69,0.4928,38,0.7632
+0111,Player 0111,111,Team 12,Conference C,High volume,401,0.4289,150,0.72
+0112,Player 0112,111,Team 12,Conference C,Regular,179,0.4358,84,0.7738
+0113,Player 0113,111,Team 12,Conference C,Regular,165,0.3818,78,0.8077
+0114,Player 0114,111,Team 12,Conference C,High volume,378,0.5185,142,0.6972
+0115,Player 0115,111,Team 12,Conference C,Regular,249,0.3293,92,0.6087
+0116,Player 0116,111,Team 12,Conference C,Regular,161,0.4224,70,0.6429
+0117,Player 0117,111,Team 12,Conference C,Low volume,83,0.494,58,0.6379
+0118,Player 0118,111,Team 12,Conference C,Low volume,103,0.5728,52,0.5577
+0119,Player 0119,111,Team 12,Conference C,Low volume,62,0.4032,32,0.7188
+0120,Player 0120,111,Team 12,Conference C,High volume,362,0.4862,144,0.5
+0121,Player 0121,112,Team 13,Conference A,Low volume,36,0.5,18,0.7778
+0122,Player 0122,112,Team 13,Conference A,Regular,118,0.4746,48,0.625
+0123,Player 0123,112,Team 13,Conference A,Regular,114,0.3947,50,0.6
+0124,Player 0124,112,Team 13,Conference A,Low volume,63,0.5238,26,0.6923
+0125,Player 0125,112,Team 13,Conference A,Low volume,51,0.5294,28,0.9286
+0126,Player 0126,112,Team 13,Conference A,Low volume,58,0.4828,20,0.8
+0127,Player 0127,112,Team 13,Conference A,High volume,258,0.3915,104,0.5769
+0128,Player 0128,112,Team 13,Conference A,High volume,288,0.5208,100,0.84
+0129,Player 0129,112,Team 13,Conference A,Regular,178,0.4382,68,0.6471
+0130,Player 0130,112,Team 13,Conference A,High volume,258,0.4457,90,0.6222
+0131,Player 0131,113,Team 14,Conference B,Low volume,40,0.425,16,0.5
+0132,Player 0132,113,Team 14,Conference B,Low volume,86,0.4302,40,0.675
+0133,Player 0133,113,Team 14,Conference B,High volume,260,0.5,106,0.6887
+0134,Player 0134,113,Team 14,Conference B,Regular,158,0.4747,76,0.8684
+0135,Player 0135,113,Team 14,Conference B,Regular,138,0.3551,74,0.6216
+0136,Player 0136,113,Team 14,Conference B,High volume,406,0.4606,140,0.8214
+0137,Player 0137,113,Team 14,Conference B,Regular,159,0.5031,68,0.7353
+0138,Player 0138,113,Team 14,Conference B,Low volume,87,0.5057,54,0.7407
+0139,Player 0139,113,Team 14,Conference B,Regular,145,0.4966,70,0.7
+0140,Player 0140,113,Team 14,Conference B,Regular,145,0.4483,64,0.6562
+0141,Player 0141,114,Team 15,Conference C,Regular,163,0.5092,74,0.7162
+0142,Player 0142,114,Team 15,Conference C,Low volume,83,0.4337,36,0.8056
+0143,Player 0143,114,Team 15,Conference C,Low volume,45,0.4222,28,0.75
+0144,Player 0144,114,Team 15,Conference C,High volume,355,0.4141,146,0.7055
+0145,Player 0145,114,Team 15,Conference C,Regular,230,0.4957,114,0.6754
+0146,Player 0146,114,Team 15,Conference C,Regular,227,0.3348,104,0.8942
+0147,Player 0147,114,Team 15,Conference C,Low volume,101,0.3861,52,0.5962
+0148,Player 0148,114,Team 15,Conference C,Low volume,102,0.4608,42,0.619
+0149,Player 0149,114,Team 15,Conference C,High volume,356,0.4494,148,0.8041
+0150,Player 0150,114,Team 15,Conference C,Regular,233,0.4635,92,0.7717
+0151,Player 0151,115,Team 16,Conference A,Regular,204,0.3725,74,0.7568
+0152,Player 0152,115,Team 16,Conference A,High volume,290,0.4414,120,0.6917
+0153,Player 0153,115,Team 16,Conference A,Regular,130,0.3923,68,0.5735
+0154,Player 0154,115,Team 16,Conference A,Low volume,40,0.525,20,0.75
+0155,Player 0155,115,Team 16,Conference A,Low volume,39,0.4103,34,0.8529
+0156,Player 0156,115,Team 16,Conference A,Low volume,77,0.6104,40,0.675
+0157,Player 0157,115,Team 16,Conference A,Regular,145,0.4345,54,0.6667
+0158,Player 0158,115,Team 16,Conference A,Low volume,98,0.4286,46,0.6739
+0159,Player 0159,115,Team 16,Conference A,Regular,127,0.4882,56,0.5357
+0160,Player 0160,115,Team 16,Conference A,Low volume,33,0.3636,18,0.6667
+0161,Player 0161,116,Team 17,Conference B,Regular,153,0.4967,84,0.7024
+0162,Player 0162,116,Team 17,Conference B,High volume,417,0.3429,152,0.4934
+0163,Player 0163,116,Team 17,Conference B,Low volume,63,0.4603,22,0.7727
+0164,Player 0164,116,Team 17,Conference B,Regular,198,0.4596,62,0.7581
+0165,Player 0165,116,Team 17,Conference B,High volume,274,0.4927,102,0.6765
+0166,Player 0166,116,Team 17,Conference B,High volume,273,0.4652,146,0.5685
+0167,Player 0167,116,Team 17,Conference B,Low volume,87,0.4368,48,0.875
+0168,Player 0168,116,Team 17,Conference B,High volume,410,0.4488,148,0.6081
+0169,Player 0169,116,Team 17,Conference B,Low volume,105,0.2952,60,0.5667
+0170,Player 0170,116,Team 17,Conference B,High volume,414,0.3792,168,0.6786
+0171,Player 0171,117,Team 18,Conference C,Low volume,84,0.4405,48,0.6875
+0172,Player 0172,117,Team 18,Conference C,Low volume,93,0.4301,52,0.8077
+0173,Player 0173,117,Team 18,Conference C,Low volume,47,0.383,36,0.5556
+0174,Player 0174,117,Team 18,Conference C,High volume,366,0.4153,170,0.6529
+0175,Player 0175,117,Team 18,Conference C,Regular,120,0.4583,68,0.6176
+0176,Player 0176,117,Team 18,Conference C,Low volume,90,0.4778,46,0.7174
+0177,Player 0177,117,Team 18,Conference C,Low volume,47,0.4043,14,0.3571
+0178,Player 0178,117,Team 18,Conference C,High volume,343,0.3761,122,0.7459
+0179,Player 0179,117,Team 18,Conference C,Low volume,90,0.4,36,0.6667
+0180,Player 0180,117,Team 18,Conference C,High volume,385,0.4182,152,0.5526
+0181,Player 0181,118,Team 19,Conference A,High volume,367,0.455,128,0.8047
+0182,Player 0182,118,Team 19,Conference A,High volume,361,0.5069,136,0.7206
+0183,Player 0183,118,Team 19,Conference A,Regular,151,0.5762,78,0.7949
+0184,Player 0184,118,Team 19,Conference A,Regular,160,0.4125,60,0.7167
+0185,Player 0185,118,Team 19,Conference A,Regular,154,0.3766,66,0.7273
+0186,Player 0186,118,Team 19,Conference A,High volume,369,0.4905,144,0.7708
+0187,Player 0187,118,Team 19,Conference A,Low volume,49,0.3878,30,0.4667
+0188,Player 0188,118,Team 19,Conference A,Low volume,42,0.619,18,0.6111
+0189,Player 0189,118,Team 19,Conference A,Regular,181,0.4586,78,0.641
+0190,Player 0190,118,Team 19,Conference A,High volume,272,0.5515,98,0.8469
+0191,Player 0191,119,Team 20,Conference B,High volume,320,0.5156,136,0.8162
+0192,Player 0192,119,Team 20,Conference B,Low volume,65,0.3385,44,0.8182
+0193,Player 0193,119,Team 20,Conference B,Regular,203,0.4335,78,0.8718
+0194,Player 0194,119,Team 20,Conference B,Low volume,33,0.4848,18,0.6111
+0195,Player 0195,119,Team 20,Conference B,Regular,118,0.5254,54,0.8148
+0196,Player 0196,119,Team 20,Conference B,High volume,339,0.5044,118,0.8305
+0197,Player 0197,119,Team 20,Conference B,Low volume,76,0.5658,34,0.8529
+0198,Player 0198,119,Team 20,Conference B,Regular,117,0.4701,58,0.6724
+0199,Player 0199,119,Team 20,Conference B,Regular,136,0.4485,40,0.65
+0200,Player 0200,119,Team 20,Conference B,Regular,120,0.4667,42,0.5952
+0201,Player 0201,120,Team 21,Conference C,Low volume,91,0.5604,40,0.575
+0202,Player 0202,120,Team 21,Conference C,Regular,231,0.5152,118,0.7203
+0203,Player 0203,120,Team 21,Conference C,Low volume,91,0.3956,52,0.6731
+0204,Player 0204,120,Team 21,Conference C,Regular,134,0.3358,54,0.9074
+0205,Player 0205,120,Team 21,Conference C,Regular,142,0.3944,58,0.6379
+0206,Player 0206,120,Team 21,Conference C,Regular,246,0.5772,92,0.6739
+0207,Player 0207,120,Team 21,Conference C,Low volume,47,0.4468,28,0.7857
+0208,Player 0208,120,Team 21,Conference C,Low volume,78,0.4231,50,0.64
+0209,Player 0209,120,Team 21,Conference C,Low volume,48,0.4583,30,0.8
+0210,Player 0210,120,Team 21,Conference C,Low volume,36,0.4722,24,0.75
+0211,Player 0211,121,Team 22,Conference A,Low volume,58,0.5,34,0.7941
+0212,Player 0212,121,Team 22,Conference A,High volume,333,0.4775,142,0.662
+0213,Player 0213,121,Team 22,Conference A,High volume,515,0.3689,176,0.6534
+0214,Player 0214,121,Team 22,Conference A,High volume,318,0.5126,144,0.7917
+0215,Player 0215,121,Team 22,Conference A,High volume,335,0.5015,142,0.8592
+0216,Player 0216,121,Team 22,Conference A,Regular,137,0.5182,54,0.7037
+0217,Player 0217,121,Team 22,Conference A,High volume,525,0.4019,174,0.7816
+0218,Player 0218,121,Team 22,Conference A,Regular,125,0.48,62,0.7258
+0219,Player 0219,121,Team 22,Conference A,Regular,137,0.3577,62,0.7097
+0220,Player 0220,121,Team 22,Conference A,Regular,186,0.4624,84,0.8214
+0221,Player 0221,122,Team 23,Conference B,Regular,142,0.5423,52,0.7885
+0222,Player 0222,122,Team 23,Conference B,Low volume,95,0.4526,50,0.8
+0223,Player 0223,122,Team 23,Conference B,High volume,254,0.4685,106,0.7642
+0224,Player 0224,122,Team 23,Conference B,Regular,141,0.4113,58,0.3621
+0225,Player 0225,122,Team 23,Conference B,High volume,385,0.4442,146,0.7329
+0226,Player 0226,122,Team 23,Conference B,Regular,161,0.4472,66,0.6364
+0227,Player 0227,122,Team 23,Conference B,High volume,401,0.4564,158,0.5949
+0228,Player 0228,122,Team 23,Conference B,Regular,173,0.5145,74,0.8784
+0229,Player 0229,122,Team 23,Conference B,Low volume,50,0.4,34,0.7059
+0230,Player 0230,122,Team 23,Conference B,Low volume,59,0.4068,28,0.7143
+0231,Player 0231,123,Team 24,Conference C,Low volume,40,0.6,24,0.6667
+0232,Player 0232,123,Team 24,Conference C,Regular,172,0.564,64,0.8906
+0233,Player 0233,123,Team 24,Conference C,Regular,149,0.4765,68,0.7059
+0234,Player 0234,123,Team 24,Conference C,Regular,128,0.4297,70,0.6714
+0235,Player 0235,123,Team 24,Conference C,High volume,340,0.3235,102,0.6765
+0236,Player 0236,123,Team 24,Conference C,Low volume,86,0.5233,22,0.6364
+0237,Player 0237,123,Team 24,Conference C,Low volume,92,0.4891,44,0.8636
+0238,Player 0238,123,Team 24,Conference C,High volume,327,0.5107,118,0.6017
+0239,Player 0239,123,Team 24,Conference C,High volume,321,0.3988,144,0.6458
+0240,Player 0240,123,Team 24,Conference C,Regular,117,0.5299,62,0.6129
