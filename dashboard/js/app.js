@@ -239,8 +239,13 @@ function renderStreakChart(byStreak, cmp) {
   col.append("line").attr("x1", d => cx(d.s)).attr("x2", d => cx(d.s))
     .attr("y1", d => y(d.act - d.ci)).attr("y2", d => y(d.act + d.ci))
     .attr("stroke", C.ink).attr("stroke-width", 1.5);
-  col.append("circle").attr("cx", d => cx(d.s)).attr("cy", d => y(d.act)).attr("r", 8)
-    .attr("fill", d => (d.s > 0 ? C.make : C.miss)).attr("stroke", C.ink).attr("stroke-width", 1.5);
+  // made side: a basketball; missed side: a rim (ring)
+  col.each(function (d) {
+    const el = d3.select(this);
+    if (d.s > 0) ball(el, cx(d.s), y(d.act), 10);
+    else el.append("circle").attr("cx", cx(d.s)).attr("cy", y(d.act)).attr("r", 9)
+      .attr("fill", "#fff").attr("stroke", C.miss).attr("stroke-width", 3.5);
+  });
   col.append("text").attr("class", "lbl strong").attr("text-anchor", "start")
     .attr("x", d => cx(d.s) + 12).attr("y", d => y(d.act) + 4).text(d => fmtPts(d.act));
 
@@ -382,6 +387,18 @@ function renderDetail(cells, P, seqBy) {
   }
 }
 
+// a gold basketball with seams
+function ball(parent, x, y, r) {
+  const g = parent.append("g").attr("transform", `translate(${x},${y})`).attr("class", "ball");
+  g.append("circle").attr("r", r);
+  if (r >= 5) {
+    const k = r * 0.7;
+    g.append("path").attr("d",
+      `M0,${-r}V${r}M${-r},0H${r}M${-k},${-k}Q${-r * 0.2},0 ${-k},${k}M${k},${-k}Q${r * 0.2},0 ${k},${k}`);
+  }
+  return g;
+}
+
 function drawStrip(container, shots, r = 6, gap = 3) {
   const step = r * 2 + gap, width = shots.length * step - gap;
   const svg = d3.select(container).append("svg")
@@ -398,7 +415,8 @@ function drawStrip(container, shots, r = 6, gap = 3) {
       start = null;
     }
   });
-  svg.selectAll("circle").data(shots).join("circle")
-    .attr("cx", (_, i) => i * step + r).attr("cy", r).attr("r", d => (d ? r : r - 0.9))
-    .attr("class", d => (d ? "make" : "miss"));
+  shots.forEach((d, i) => {
+    if (d) ball(svg, i * step + r, r, r);
+    else svg.append("circle").attr("cx", i * step + r).attr("cy", r).attr("r", r - 0.9).attr("class", "miss");
+  });
 }

@@ -140,3 +140,54 @@ input[type=range] { width: 100%; accent-color: var(--ink); }
   .kpi .k-val { font-size: 30px; }
   .hint { display: none; }
 }
+
+/* =========================================================
+   Basketball theme
+   court floor behind the results, scoreboard header and cards,
+   made shots drawn as basketballs, missed shots as rims
+   ========================================================= */
+:root {
+  --floor: #e6c995;          /* maple court */
+  --floor-line: #fffaf0;     /* court lines */
+  --board: #16161e;          /* scoreboard */
+  --board-text: #f4f2ea;
+  --board-muted: #a3a5b3;
+}
+
+/* scoreboard header */
+.bar { background: var(--board); color: var(--board-text); border-bottom: 0; }
+.bar .sub { color: var(--board-muted); }
+.bar .legend { color: var(--board-text); }
+.bar .k-miss { border-color: #8f86e6; }   /* lighter purple so the rim reads on black */
+.title { align-items: center; }
+h1 { letter-spacing: 0.01em; }
+.ball-ico { width: 30px; height: 30px; flex: none; margin-right: 2px; }
+.ball-ico.small { width: 15px; height: 15px; vertical-align: -3px; margin-right: 6px; }
+.ball-ico circle { fill: var(--make); stroke: var(--make-edge); stroke-width: 1; }
+.ball-ico path { fill: none; stroke: #6b5a10; stroke-width: 1.1; }
+
+/* court floor behind the results */
+.main { position: relative; background: var(--floor); }
+.main > * { position: relative; z-index: 1; }
+.main > .court { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.court rect, .court line, .court circle, .court path { fill: none; stroke: var(--floor-line); stroke-width: 4; opacity: 0.85; }
+.court rect:nth-of-type(2), .court rect:nth-of-type(3) { fill: rgba(22, 22, 30, 0.06); }
+
+/* panels sit on the floor like scorer's tables */
+.panel { background: #fff; border-radius: 6px; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08); }
+
+/* scoreboard cards */
+.kpi { background: var(--board); color: var(--board-text); border-radius: 6px; }
+.kpi .k-name, .kpi .k-note { color: var(--board-muted); }
+.kpi .k-val { font-variant-numeric: tabular-nums; }
+.kpi.main-kpi { background: var(--board); box-shadow: inset 0 -5px 0 var(--make); }
+.badge.noise { background: #3a3a48; color: #e6e6ee; }
+
+/* made shot = basketball, missed shot = rim */
+.ball circle { fill: var(--make); stroke: var(--make-edge); stroke-width: 1; }
+.ball path { fill: none; stroke: #6b5a10; stroke-width: 0.9; opacity: 0.8; }
+.miss { stroke-width: 2.2; }
+
+/* sidebar reads like a coach's clipboard */
+.filters { background: #fff; border-right: 4px solid var(--board); }
+.f-label { color: var(--ink); }
