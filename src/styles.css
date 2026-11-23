@@ -209,3 +209,13 @@ table.t th { color: var(--text-muted); font-weight: 600; }
 .kicker { color: var(--series-fg-ink); }
 .rule { border-left-color: var(--accent); }
 .topnav { border-bottom-color: transparent; }
+
+/* ── 3-section layout ── */
+.answer { margin-top: 28px; }
+.sub-h { font-family: var(--serif); font-size: 26px; margin: 34px 0 12px; }
+.chapter.wide { max-width: 1480px; margin: 0 auto; padding: 18px 18px 8px; }
+.wide-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; margin: 0 4px 10px; }
+.wide-head .kicker { margin: 0; }
+.lede-sm { margin: 0; font-size: 15.5px; flex: 1; min-width: 260px; }
+iframe.explorer { width: 100%; height: max(760px, calc(100vh - 150px)); border: 0; border-radius: 10px; box-shadow: 0 0 0 1px var(--grid); background: #fff; display: block; }
+@media (max-width: 1100px) { iframe.explorer { height: 1700px; } }
