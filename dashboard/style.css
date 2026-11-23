@@ -101,6 +101,7 @@ input[type=range] { width: 100%; accent-color: var(--ink); }
 .x-axis text { font-size: 13px; font-weight: 700; }
 .lbl { font-family: var(--font); font-size: 12px; fill: var(--muted); }
 .lbl.strong { fill: var(--ink); font-weight: 700; }
+.side-count { font-family: var(--font); font-size: 30px; font-weight: 900; font-variation-settings: "wdth" 62; }
 
 /* ---------- Detail ---------- */
 .detail-empty { height: 100%; display: flex; align-items: center; justify-content: center; color: var(--muted); }

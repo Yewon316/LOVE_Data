@@ -247,73 +247,104 @@ function renderStreakChart(byStreak, cmp) {
   d3.select("#streak-title").text(`Next-shot accuracy after each streak, ${SHOT_WORD[state.shot]}`);
 }
 
+// One dot per player, spread along a single line:
+// right = shot better right after a make than right after a miss, left = worse.
 function renderPlayerChart(rows, P) {
   const [W, H] = sizeOf("#player-chart");
-  const m = { top: 14, right: 16, bottom: 36, left: 58 };
+  const m = { top: 56, right: 20, bottom: 44, left: 20 };
   const w = W - m.left - m.right, h = H - m.top - m.bottom;
   const svg = d3.select("#player-chart").selectAll("svg").data([0]).join("svg").attr("viewBox", `0 0 ${W} ${H}`);
   svg.selectAll("*").remove();
   const g = svg.append("g").attr("transform", `translate(${m.left},${m.top})`);
 
-  // per player: after a make vs. after a miss, minus what chance gives
   const pts = [];
   for (const [id, rs] of d3.group(rows, r => r.player)) {
     const c = compare(rs, 1);
     if (c.H.n < 5 || c.M.n < 5) continue;
-    const all = sum(rs);
-    pts.push({ id, p: P.get(id), pct: all.pct, n: all.n, eff: c.effect, H: c.H, M: c.M });
+    pts.push({ id, p: P.get(id), n: c.H.n + c.M.n, diff: c.H.pct * 100 - c.M.pct * 100, chance: c.chance, H: c.H, M: c.M });
   }
-  d3.select("#players-hint").text(
-    `${pts.length} players. Higher = shoots better after a make than after a miss, beyond chance. Click a dot to see that player.`);
-  if (!pts.length) return;
+  if (!pts.length) {
+    g.append("text").attr("class", "lbl").attr("x", w / 2).attr("y", h / 2).attr("text-anchor", "middle")
+      .text("Not enough shots with these filters. Try lowering the minimum.");
+    return;
+  }
 
-  const x = d3.scaleLinear().domain(d3.extent(pts, d => d.pct)).nice().range([0, w]);
-  const lim = Math.max(10, d3.quantile(pts.map(d => Math.abs(d.eff)).sort(d3.ascending), 0.97));
-  const y = d3.scaleLinear().domain([-lim, lim]).nice().range([h, 0]);
-  const r = d3.scaleSqrt().domain([0, d3.max(pts, d => d.n)]).range([2, 9]);
-  const clampY = v => y(Math.max(y.domain()[0], Math.min(y.domain()[1], v)));
+  const lim = Math.max(15, d3.quantile(pts.map(d => Math.abs(d.diff)).sort(d3.ascending), 0.96));
+  const x = d3.scaleLinear().domain([-lim, lim]).nice().range([0, w]);
+  const clampX = v => x(Math.max(x.domain()[0], Math.min(x.domain()[1], v)));
+  const r = d3.scaleSqrt().domain([0, d3.max(pts, d => d.n)]).range([2.5, Math.min(9, h / 14)]);
+  const mid = h / 2;
 
-  g.append("g").attr("class", "axis")
-    .call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(d => (d === 0 ? "No effect" : fmtPts(d, 0))))
-    .call(s => s.select(".domain").remove());
-  g.append("g").attr("class", "axis").attr("transform", `translate(0,${h})`)
-    .call(d3.axisBottom(x).ticks(6).tickFormat(d => d3.format(".0%")(d)))
-    .call(s => s.select(".domain").attr("stroke", C.muted));
-  g.append("text").attr("class", "lbl").attr("x", w).attr("y", h + 30).attr("text-anchor", "end")
-    .text(`Player's overall percentage on ${SHOT_WORD[state.shot]} →`);
-  g.append("line").attr("x1", 0).attr("x2", w).attr("y1", y(0)).attr("y2", y(0)).attr("stroke", C.muted);
+  // side shading and plain-language labels
+  g.append("rect").attr("x", x(0)).attr("width", w - x(0)).attr("y", 0).attr("height", h)
+    .attr("fill", C.make).attr("fill-opacity", 0.14);
+  g.append("rect").attr("x", 0).attr("width", x(0)).attr("y", 0).attr("height", h)
+    .attr("fill", C.miss).attr("fill-opacity", 0.05);
 
-  // weighted average across players
-  const avgEff = d3.sum(pts, d => d.eff * d.n) / d3.sum(pts, d => d.n);
-  g.append("line").attr("x1", 0).attr("x2", w).attr("y1", y(avgEff)).attr("y2", y(avgEff))
-    .attr("stroke", C.ink).attr("stroke-dasharray", "4 4");
-  g.append("text").attr("class", "lbl strong").attr("x", 4).attr("y", y(avgEff) - 5)
-    .text(`Average ${fmtPts(avgEff)}`);
+  const better = pts.filter(d => d.diff > 0).length, worse = pts.filter(d => d.diff < 0).length;
+  const head = svg.append("g").attr("transform", `translate(${m.left},${m.top - 14})`);
+  head.append("text").attr("class", "side-count").attr("x", 0).attr("y", -14).style("fill", C.miss).text(worse);
+  head.append("text").attr("class", "lbl").attr("x", 0).attr("y", 2)
+    .text(`players shot worse after a make`);
+  head.append("text").attr("class", "side-count").attr("x", w).attr("y", -14).attr("text-anchor", "end")
+    .style("fill", C.makeText).text(better);
+  head.append("text").attr("class", "lbl").attr("x", w).attr("y", 2).attr("text-anchor", "end")
+    .text(`players shot better after a make`);
+
+  // beeswarm: dots pushed apart so none overlap
+  const nodes = pts.map(d => ({ ...d, x: clampX(d.diff), y: mid, r: r(d.n) }));
+  const sim = d3.forceSimulation(nodes)
+    .force("x", d3.forceX(d => clampX(d.diff)).strength(1))
+    .force("y", d3.forceY(mid).strength(0.06))
+    .force("collide", d3.forceCollide(d => d.r + 0.6))
+    .stop();
+  for (let i = 0; i < 160; i++) sim.tick();
+  nodes.forEach(d => { d.y = Math.max(d.r, Math.min(h - d.r, d.y)); });
+
+  // reference lines
+  g.append("line").attr("x1", x(0)).attr("x2", x(0)).attr("y1", 0).attr("y2", h).attr("stroke", C.ink).attr("stroke-width", 1.5);
+  const luck = d3.sum(pts, d => d.chance * d.n) / d3.sum(pts, d => d.n);
+  g.append("line").attr("x1", x(luck)).attr("x2", x(luck)).attr("y1", 0).attr("y2", h)
+    .attr("stroke", C.muted).attr("stroke-dasharray", "4 4");
+  g.append("text").attr("class", "lbl").attr("x", x(luck) - 4).attr("y", h - 4).attr("text-anchor", "end")
+    .text(`luck alone: ${fmtPts(luck)}`);
 
   const sel = state.player;
-  g.selectAll(".pdot").data(pts.sort((a, b) => (a.id === sel) - (b.id === sel))).join("circle")
-    .attr("cx", d => x(d.pct)).attr("cy", d => clampY(d.eff)).attr("r", d => (d.id === sel ? r(d.n) + 3 : r(d.n)))
-    .attr("fill", d => (d.id === sel ? C.ink : C.dot)).attr("fill-opacity", d => (d.id === sel ? 1 : 0.55))
-    .attr("stroke", d => (d.id === sel ? "#fff" : "none")).attr("stroke-width", 2)
+  g.selectAll(".pdot").data(nodes.sort((a, b) => (a.id === sel) - (b.id === sel))).join("circle")
+    .attr("cx", d => d.x).attr("cy", d => d.y).attr("r", d => (d.id === sel ? d.r + 2 : d.r))
+    .attr("fill", d => (d.id === sel ? C.ink : d.diff > 0 ? C.make : C.miss))
+    .attr("fill-opacity", d => (d.id === sel ? 1 : d.diff > 0 ? 0.9 : 0.55))
+    .attr("stroke", d => (d.id === sel ? "#fff" : d.diff > 0 ? C.makeEdge : "none")).attr("stroke-width", d => (d.id === sel ? 2 : 0.6))
     .style("cursor", "pointer")
     .on("mousemove", (e, d) => tip(e,
       `<b>${d.p.name}</b>, ${d.p.team}<br>
-       After a make: ${fmtPct(d.H.pct)}% (${d.H.n})<br>After a miss: ${fmtPct(d.M.pct)}% (${d.M.n})<br>
-       Hot hand effect ${fmtPts(d.eff)} pts`))
+       Right after a make: ${fmtPct(d.H.pct)}% of ${d.H.n} shots<br>
+       Right after a miss: ${fmtPct(d.M.pct)}% of ${d.M.n} shots<br>
+       ${d.diff >= 0 ? "Better" : "Worse"} after a make by ${Math.abs(d.diff).toFixed(1)} pts`))
     .on("mouseleave", hideTip)
     .on("click", (e, d) => window.__selectPlayer(d.id === sel ? null : d.id));
 
   if (sel) {
-    const d = pts.find(q => q.id === sel);
-    if (d) g.append("text").attr("class", "lbl strong").attr("x", x(d.pct) + r(d.n) + 6).attr("y", clampY(d.eff) + 4).text(d.p.name);
+    const d = nodes.find(q => q.id === sel);
+    if (d) {
+      const right = d.x < w - 120;
+      g.append("text").attr("class", "lbl strong").attr("x", d.x + (right ? d.r + 6 : -d.r - 6)).attr("y", d.y + 4)
+        .attr("text-anchor", right ? "start" : "end").text(d.p.name);
+    }
   }
+
+  g.append("g").attr("class", "axis").attr("transform", `translate(0,${h})`)
+    .call(d3.axisBottom(x).ticks(7).tickFormat(d => (d === 0 ? "Same" : fmtPts(d, 0) + " pts")))
+    .call(s => s.select(".domain").attr("stroke", C.muted));
+  g.append("text").attr("class", "lbl").attr("x", w / 2).attr("y", h + 36).attr("text-anchor", "middle")
+    .text("Shooting % right after a make, minus right after a miss");
 }
 
 function renderDetail(cells, P, seqBy) {
   const root = d3.select("#detail");
   const p = state.player && P.get(state.player);
   if (!p) {
-    root.html(`<div class="detail-empty">Pick a player with the search box or click a dot in “Every player” to see their games shot by shot.</div>`);
+    root.html(`<div class="detail-empty">Pick a player with the search box or click a dot in the player chart to see their games shot by shot.</div>`);
     return;
   }
   const types = new Set(typesOf(state.shot));
