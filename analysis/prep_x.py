@@ -1,0 +1,26 @@
+import pyarrow.parquet as pq, pyarrow as pa, pyarrow.compute as pc, numpy as np
+t=pq.read_table("../shots_raw.parquet",columns=["game_id","game_play_number","season","season_type","athlete_id_1","type_text","text","home_score","away_score","start_game_seconds_remaining","period_number","team_id"])
+low=pc.utf8_lower(pc.fill_null(t["text"],""))
+tt=pc.utf8_lower(pc.fill_null(t["type_text"],""))
+def has(a,s): return pc.match_substring(a,s)
+made=pc.or_(has(low," made "),has(low," makes "))
+miss=pc.or_(has(low," missed "),has(low," misses "))
+ft=pc.or_(has(low,"free throw"),has(tt,"freethrow"))
+ft=pc.or_(ft,has(tt,"free throw"))
+three=pc.or_(has(low,"three"),has(tt,"three"))
+inside=pc.or_(pc.or_(has(low,"layup"),has(low,"dunk")),pc.or_(has(low,"tip"),pc.or_(has(tt,"layup"),pc.or_(has(tt,"dunk"),has(tt,"tipshot")))))
+valid=pc.and_(pc.or_(made,miss),pc.invert(pc.and_(made,miss)))
+valid=pc.and_(valid,pc.is_valid(t["athlete_id_1"]))
+y=pc.cast(made,pa.int8())
+typ=pc.if_else(ft,0,pc.if_else(three,1,pc.if_else(inside,3,2)))   # 0 FT,1 3PT,2 2PT jumper,3 inside
+margin=pc.abs(pc.subtract(t["home_score"],t["away_score"]))
+out=pa.table({"game":t["game_id"],"play":t["game_play_number"],"season":t["season"],"stype":t["season_type"],"ath":t["athlete_id_1"],"team":t["team_id"],
+ "y":y,"typ":pc.cast(typ,pa.int8()),"margin":margin,"secs":t["start_game_seconds_remaining"],"period":t["period_number"]})
+out=out.filter(valid)
+print(out.num_rows)
+pq.write_table(out,"shots_x.parquet",compression="zstd")
+import sys; sys.exit(0)
+import pandas as pd
+d=out.to_pandas()
+print(d.groupby("typ").y.agg(["size","mean"]))
+print(d.margin.describe())

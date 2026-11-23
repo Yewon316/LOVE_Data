@@ -1,16 +1,18 @@
 :root {
   color-scheme: light;
-  --surface-1: #fcfcfb;
-  --surface-2: #f3f2ef;
+  --surface-1: #fdfcf8;
+  --surface-2: #f6f1de;
+  --accent: #332288;
+  --accent-ink: #fdfcf8;
   --text-primary: #0b0b0b;
   --text-secondary: #52514e;
   --text-muted: #6b6a66;
   --grid: #e4e3df;
   --axis: #b9b8b2;
-  --series-ft: #2a78d6;
-  --series-fg: #eb6834;
-  --series-ft-ink: #1c5cab;
-  --series-fg-ink: #b8471c;
+  --series-ft: #4a3bb0;
+  --series-fg: #a8902a;
+  --series-ft-ink: #332288;
+  --series-fg-ink: #75621a;
   --good: #0c7a0c;
   --serif: ui-serif, Georgia, "Times New Roman", serif;
   --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -18,17 +20,19 @@
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --surface-1: #1a1a19;
-    --surface-2: #242423;
+    --surface-1: #17161d;
+    --surface-2: #24222e;
+    --accent: #ddcc77;
+    --accent-ink: #17161d;
     --text-primary: #f0efec;
     --text-secondary: #c3c2b7;
     --text-muted: #a3a29a;
     --grid: #333331;
     --axis: #5a5953;
-    --series-ft: #3987e5;
-    --series-fg: #d95926;
-    --series-ft-ink: #86b6ef;
-    --series-fg-ink: #f2a07f;
+    --series-ft: #7a6ddb;
+    --series-fg: #a8902a;
+    --series-ft-ink: #b3abf2;
+    --series-fg-ink: #ddcc77;
     --good: #0ca30c;
   }
 }
@@ -166,3 +170,42 @@ table.t th { color: var(--text-muted); font-weight: 600; }
 .chart text.halo { paint-order: stroke; stroke: var(--surface-1); stroke-width: 5px; stroke-linejoin: round; }
 .pager { width: 100%; }
 .pager .btn:disabled { visibility: hidden; }
+
+/* ── explore ── */
+.viewtabs { display: flex; gap: 4px; border-bottom: 1.5px solid var(--grid); margin: 6px 0 16px; }
+.viewtabs button { font: inherit; font-weight: 600; font-size: 15.5px; background: none; border: 0; border-bottom: 3px solid transparent; margin-bottom: -1.5px; padding: 10px 14px; color: var(--text-muted); cursor: pointer; }
+.viewtabs button[aria-selected="true"] { color: var(--text-primary); border-bottom-color: var(--text-primary); }
+.filters { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-bottom: 8px; }
+.fgroup { display: flex; flex-direction: column; }
+.flabel { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+.fgroup .seg { margin: 0 0 8px; }
+.sel { font: inherit; font-size: 15px; color: var(--text-primary); background: var(--surface-1); border: 1.5px solid var(--axis); border-radius: 10px; padding: 8px 12px; min-height: 40px; min-width: 200px; margin-bottom: 8px; }
+.sel:focus-visible { outline: 2px solid var(--series-ft); outline-offset: 1px; }
+.result { display: grid; grid-template-columns: auto 1fr; gap: 6px 26px; align-items: center; background: var(--surface-2); border-radius: 14px; padding: 18px 22px; margin: 4px 0 6px; }
+.res-num { font: 700 clamp(44px, 7vw, 60px)/1 var(--serif); }
+.res-num span { font: 600 .32em var(--sans); color: var(--text-muted); margin-left: 4px; }
+.res-verdict { font-weight: 700; font-size: 14.5px; margin-top: 6px; }
+.up { color: var(--series-ft-ink); } .down { color: var(--series-fg-ink); } .flat { color: var(--text-secondary); }
+.res-num.flat { color: var(--text-primary); }
+.res-text { margin: 0; font-size: 15.5px; }
+.res-n { color: var(--text-muted); font-size: 14px; }
+.pcard { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 26px; background: var(--surface-2); border-radius: 14px; padding: 14px 20px; margin-top: 8px; }
+.pname { font: 700 20px var(--serif); }
+.pmeta { font-size: 13.5px; color: var(--text-muted); }
+.pstat { font-size: 15px; color: var(--text-secondary); }
+.pstat b { color: var(--text-primary); font-size: 17px; }
+.pver { font-weight: 700; font-size: 14.5px; }
+@media (max-width: 760px) { .result { grid-template-columns: 1fr; } .sel { min-width: 0; width: 100%; } .fgroup { width: 100%; } }
+
+/* ── indigo / sand theme accents ── */
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn:hover, .btn:focus-visible { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.tabs button[aria-current="step"] .num { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.bar div { background: var(--accent); }
+.bar { background: #ddcc77; }
+.brand { color: var(--series-ft-ink); }
+.viewtabs button[aria-selected="true"] { border-bottom-color: var(--accent); }
+.kicker { color: var(--series-fg-ink); }
+.rule { border-left-color: var(--accent); }
+.topnav { border-bottom-color: transparent; }

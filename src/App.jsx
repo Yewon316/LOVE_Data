@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { scaleLinear } from 'd3-scale'
 import { ticks, max } from 'd3-array'
+import Explore from './Explore.jsx'
 
 const sgn = (v, d = 1) => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d)
 const pct = (v, d = 1) => (v * 100).toFixed(d) + '%'
@@ -153,8 +154,8 @@ function Answer({ R, go }) {
       <p className="caption">pp = percentage points: make rate after three straight makes minus make rate after three straight misses, compared with what shuffled shot orders produce. NCAA women’s basketball, 2006–2026, 8.3 million shots.</p>
       <p>The rest of this page shows how we got there, and why a naive look at the same data says the opposite.</p>
       <div className="btn-row">
-        <button className="btn" onClick={() => go(4)}>Jump to where it shows up</button>
-        <button className="btn" onClick={() => go(5)}>What it means for coaches</button>
+        <button className="btn" onClick={() => go(5)}>Where it shows up</button>
+        <button className="btn primary" onClick={() => go(6)}>Explore it yourself</button>
       </div>
     </>
   )
@@ -377,6 +378,7 @@ function Method({ R }) {
           <li>For each player: make rate after k straight makes minus rate after k straight misses (k = 1, 2, 3), averaged across players, weighted by sample size.</li>
           <li>Chance baseline: shuffle each player’s outcomes within the same game ({R.meta.perm_ft} shuffles for free throws, {R.meta.perm_fg} for field goals, which also stay within shot type), then recompute. This removes the Miller–Sanjurjo streak-selection bias.</li>
           <li>Effect = real value − shuffled average. Intervals are ±1.96 SD of the shuffles; p-values are two-sided.</li>
+          <li>Explore chapter: all 990 combinations of shot type, season, game situation and streak length were precomputed with 90 shuffles each (headline numbers use the larger runs above). Player-level chance bands come from the same shuffles; players need an effective sample of at least 4 three-in-a-row situations.</li>
         </ul>
       </details>
       <details><summary>Limitations</summary>
@@ -397,7 +399,7 @@ export default function App() {
   const [R, setR] = useState(null)
   const [sits, setSits] = useState(null)
   const [err, setErr] = useState(false)
-  const readHash = () => { const n = parseInt((window.location.hash || '').replace(/\D/g, ''), 10); return n >= 1 && n <= 8 ? n - 1 : 0 }
+  const readHash = () => { const n = parseInt((window.location.hash || '').replace(/\D/g, ''), 10); return n >= 1 && n <= 9 ? n - 1 : 0 }
   const [ch, setCh] = useState(readHash)
 
   useEffect(() => {
@@ -412,6 +414,7 @@ export default function App() {
     { t: 'The trap', title: 'The raw numbers lie' },
     { t: 'Chance', title: 'Chance is not zero' },
     { t: 'Where', title: 'Where it shows up' },
+    { t: 'Explore', title: 'Explore it yourself' },
     { t: 'Coaches', title: 'What this means for a coach' },
     { t: 'Method', title: 'Method and limits' },
   ]
@@ -464,6 +467,10 @@ export default function App() {
       <NullHist R={R} />
     </>,
     <Forest R={R} />,
+    <>
+      <p>Pick any combination of shot type, game situation, streak length and season, or look up a team and its players. Every number was precomputed with the same shuffle test.</p>
+      <Explore />
+    </>,
     <Coach R={R} />,
     <Method R={R} />,
   ]
