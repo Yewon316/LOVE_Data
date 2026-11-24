@@ -23,7 +23,10 @@ if mode=="prep":
     # player own average per group, volume per group
     key=pid*2+grp
     cnt=np.bincount(key,minlength=len(pid_u)*2); mk=np.bincount(key,weights=d.y.values,minlength=len(pid_u)*2)
-    avg=(mk/np.maximum(cnt,1))[key]
+    # baseline = the player's own average for THIS shot type (FT, 2PT, 3PT), so 2s and 3s are each judged against their own rate
+    tkey=pid*3+typ3
+    tc=np.bincount(tkey,minlength=len(pid_u)*3); tm=np.bincount(tkey,weights=d.y.values,minlength=len(pid_u)*3)
+    avg=(tm/np.maximum(tc,1))[tkey]
     vol=np.digitize(cnt[key],[50,200,500]).astype(np.int64)   # 0:<50 1:50-199 2:200-499 3:500+
     # primary team per player
     tp=d.groupby(["ath","team"]).size().reset_index(name="n").sort_values("n").drop_duplicates("ath",keep="last").set_index("ath").team

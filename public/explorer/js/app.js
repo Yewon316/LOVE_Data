@@ -167,12 +167,16 @@ function sum(rows) {
   return o;
 }
 
+const MIN_SHOTS = 30;   // below this on either side, the comparison is not shown
+// binomial SE with the rate kept away from exactly 0 or 1, so a tiny sample can never look "certain"
+const seOf = (p, n) => { const q = Math.min(Math.max(p, 0.5 / n), 1 - 0.5 / n); return q * (1 - q) / n; };
 function compare(rows, k) {
   const H = sum(rows.filter(r => r.streak >= k));
   const M = sum(rows.filter(r => r.streak <= -k));
   const raw = H.act - M.act, chance = H.chance - M.chance, effect = raw - chance;
-  const se = Math.sqrt(H.pct * (1 - H.pct) / H.n + M.pct * (1 - M.pct) / M.n) * 100;
-  return { H, M, raw, chance, effect, se };
+  const se = Math.sqrt(seOf(H.pct, H.n) + seOf(M.pct, M.n)) * 100;
+  const thin = !(H.n >= MIN_SHOTS && M.n >= MIN_SHOTS);
+  return { H, M, raw, chance, effect, se, thin };
 }
 
 async function teamRows(t) {
@@ -219,19 +223,24 @@ async function render() {
 }
 
 function renderKpis(rows, cmp, nPlayers) {
-  const k = state.k, kTxt = k === 3 ? "3+" : k;
+  const k = state.k;
+  const mk = k === 1 ? "1 make" : k === 2 ? "2 makes" : "3+ makes";
+  const ms = k === 1 ? "1 miss" : k === 2 ? "2 misses" : "3+ misses";
   const total = d3.sum(rows, r => r.n);
-  const clear = Math.abs(cmp.effect) > 1.96 * cmp.se;
+  const thin = cmp.thin || isNaN(cmp.effect);
+  const clear = !thin && Math.abs(cmp.effect) > 1.96 * cmp.se;
   const dir = cmp.effect > 0 ? "better" : "worse";
+  const few = `Too few shots to tell: ${d3.format(",")(cmp.H.n || 0)} after ${mk}, ${d3.format(",")(cmp.M.n || 0)} after ${ms} (need ${MIN_SHOTS} each)`;
   const items = [
     { name: "Shots in view", val: d3.format(",")(total), unit: "", note: `${nPlayers} players, ${SHOT_WORD[state.shot]}` },
-    { name: `After ${kTxt} makes vs. after ${kTxt} misses`, val: fmtPts(cmp.raw), unit: "pts",
-      note: `Made ${fmtPct(cmp.H.pct)}% vs. ${fmtPct(cmp.M.pct)}% of next shots` },
-    { name: "What chance alone gives", val: fmtPts(cmp.chance), unit: "pts", note: "Same gap in games with shuffled shot order" },
-    { name: "Hot hand effect", val: fmtPts(cmp.effect), unit: "pts", main: true,
-      badge: isNaN(cmp.effect) ? "" : clear ? '<span class="badge clear">Clear</span>' : '<span class="badge noise">Could be noise</span>',
-      note: isNaN(cmp.effect) ? "Not enough shots with these filters"
-        : `${Math.abs(cmp.effect).toFixed(1)} pts ${dir} than chance, ± ${(1.96 * cmp.se).toFixed(1)}` },
+    { name: `After ${mk} vs. after ${ms}`, val: thin ? "–" : fmtPts(cmp.raw), unit: thin ? "" : "pts",
+      note: thin ? "Too few shots to tell" : `Made ${fmtPct(cmp.H.pct)}% vs. ${fmtPct(cmp.M.pct)}% of next shots` },
+    { name: "What chance alone gives", val: thin ? "–" : fmtPts(cmp.chance), unit: thin ? "" : "pts",
+      note: thin ? "Too few shots to tell" : "Same gap in games with shuffled shot order" },
+    { name: "Hot hand effect", val: thin ? "–" : fmtPts(cmp.effect), unit: thin ? "" : "pts", main: true,
+      badge: thin ? "" : clear ? '<span class="badge clear">Clear</span>' : '<span class="badge noise">Could be noise</span>',
+      note: thin ? few : `${Math.abs(cmp.effect).toFixed(1)} pts ${dir} than chance, ± ${(1.96 * cmp.se).toFixed(1)}`
+        + (clear && (state.team !== "all" || state.only) ? ". One team or player: with hundreds to pick from, some look clear by luck." : "") },
   ];
   d3.select("#kpis").selectAll(".kpi").data(items).join("div")
     .attr("class", d => "kpi" + (d.main ? " main-kpi" : ""))
@@ -239,7 +248,6 @@ function renderKpis(rows, cmp, nPlayers) {
                 <div class="k-val">${d.val}<small>${d.unit}</small>${d.badge || ""}</div>
                 <div class="k-note">${d.note}</div>`);
 }
-
 function sizeOf(sel) {
   const el = document.querySelector(sel);
   return [Math.max(280, el.clientWidth), Math.max(180, el.clientHeight)];
@@ -253,10 +261,12 @@ function renderStreakChart(byStreak, cmp) {
   svg.selectAll("*").remove();
   const g = svg.append("g").attr("transform", `translate(${m.left},${m.top})`);
 
-  const data = STREAKS.map(s => ({ s, ...byStreak.get(s) }));
+  const data = STREAKS.map(s => { const o = byStreak.get(s); return { s, ...o, thin: !(o.n >= MIN_SHOTS) }; });
   const x = d3.scaleBand().domain(STREAKS).range([0, w]).padding(0.12);
-  const ext = d3.max(data, d => Math.max(Math.abs(d.act || 0) + (d.ci || 0), Math.abs(d.chance || 0))) || 5;
-  const y = d3.scaleLinear().domain([-Math.max(4, ext), Math.max(4, ext)]).nice().range([h, 0]);
+  const ext = d3.max(data.filter(d => !d.thin), d => Math.max(Math.abs(d.act || 0) + (d.ci || 0), Math.abs(d.chance || 0))) || 5;
+  const y0 = d3.scaleLinear().domain([-Math.max(4, ext), Math.max(4, ext)]).nice().range([h, 0]);
+  const [lo, hi] = y0.domain(); const y = v => y0(Math.max(lo, Math.min(hi, v)));
+  y.domain = () => y0.domain(); y.ticks = (...a) => y0.ticks(...a); y.range = () => y0.range(); y.copy = () => y0.copy(); y.tickFormat = (...a) => y0.tickFormat(...a);
 
   // shade the columns used in the comparison
   g.selectAll(".band").data(STREAKS.filter(s => Math.abs(s) >= state.k)).join("rect")
@@ -264,7 +274,7 @@ function renderStreakChart(byStreak, cmp) {
     .attr("fill", s => (s > 0 ? C.make : C.miss)).attr("fill-opacity", s => (s > 0 ? 0.18 : 0.06));
 
   g.append("g").attr("class", "axis")
-    .call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(d => (d === 0 ? "Usual rate" : fmtPts(d, 0) + " pts")))
+    .call(d3.axisLeft(y0).ticks(5).tickSize(-w).tickFormat(d => (d === 0 ? "Usual rate" : fmtPts(d, 0) + " pts")))
     .call(s => s.select(".domain").remove());
   g.append("line").attr("x1", 0).attr("x2", w).attr("y1", y(0)).attr("y2", y(0)).attr("stroke", C.muted);
   const xa = g.append("g").attr("class", "axis x-axis").attr("transform", `translate(0,${h})`)
@@ -277,9 +287,10 @@ function renderStreakChart(byStreak, cmp) {
     .on("mousemove", (e, d) => tip(e,
       `<b>${STREAK_LABEL[d.s]}${Math.abs(d.s) < 3 ? "" : ""} in a row</b><br>
        Next shot went in ${fmtPct(d.pct)}% of the time<br>
-       ${fmtPts(d.act)} pts vs. usual (chance: ${fmtPts(d.chance)})<br>${d3.format(",")(d.n)} shots`))
+       ${fmtPts(d.act)} pts vs. usual (chance: ${fmtPts(d.chance)})<br>${d3.format(",")(d.n)} shots${d.thin ? `<br><b>Too few shots to read (need ${MIN_SHOTS})</b>` : ""}`))
     .on("mouseleave", hideTip);
   col.append("rect").attr("x", d => x(d.s)).attr("width", x.bandwidth()).attr("y", 0).attr("height", h).attr("fill", "transparent");
+  col.attr("opacity", d => (d.thin ? 0.3 : 1));
   // chance marker
   col.append("line").attr("x1", d => cx(d.s) - 18).attr("x2", d => cx(d.s) + 18)
     .attr("y1", d => y(d.chance)).attr("y2", d => y(d.chance))
@@ -296,7 +307,7 @@ function renderStreakChart(byStreak, cmp) {
       .attr("fill", "#fff").attr("stroke", C.miss).attr("stroke-width", 3.5);
   });
   col.append("text").attr("class", "lbl strong").attr("text-anchor", "start")
-    .attr("x", d => cx(d.s) + 12).attr("y", d => y(d.act) + 4).text(d => fmtPts(d.act));
+    .attr("x", d => cx(d.s) + 12).attr("y", d => y(d.act) + 4).text(d => (d.thin ? "few shots" : fmtPts(d.act)));
 
   d3.select("#streak-title").text(`Next-shot accuracy after each streak, ${SHOT_WORD[state.shot]}`);
 }

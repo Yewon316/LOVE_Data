@@ -204,8 +204,8 @@ function Coach({ H }) {
       <h3 className="sub-h">What this means for a coach</h3>
       <div className="cols3">
         <div className="card"><div className="pill ft">Free throws</div><h3>Trust the routine</h3><p>A make streak at the line is worth about <strong>{sgn(H.ft.effect)} pts</strong>. Real, but far too small to change who goes to the line.</p></div>
-        <div className="card"><div className="pill fg">Field goals</div><h3>Don’t feed the streak</h3><p>A shooter on a run is no more likely to hit her next field goal (<strong>{sgn(H.fg.effect)} pts</strong>, ± {H.fg.ci.toFixed(1)}). Run the best shot, not the hottest player.</p></div>
-        <div className="card"><div className="pill fg">Three-pointers</div><h3>The one exception</h3><p>Threes are the only field goals with a clear lift (<strong>{sgn(H.three.effect)} pts</strong>, ± {H.three.ci.toFixed(1)}). Worth a look in scouting, not a reason to force shots.</p></div>
+        <div className="card"><div className="pill fg">Field goals</div><h3>Don’t feed the streak</h3><p>A shooter on a run is no more likely to hit her next field goal (<strong>{sgn(H.fg.effect)} pts</strong>, ± {H.fg.ci.toFixed(1)}, within chance). Run the best shot, not the hottest player.</p></div>
+        <div className="card"><div className="pill fg">Three-pointers</div><h3>A small exception</h3><p>Threes show a measurable streak effect (<strong>{sgn(H.three.effect)} pts</strong>, ± {H.three.ci.toFixed(1)}), but most of it comes from shooters doing worse after three straight misses, not better after makes. Shooters also take more threes after a make streak. Worth a look in scouting, not a reason to force shots.</p></div>
       </div>
       <div className="rule">
         <div className="kicker">Decision rule</div>
@@ -221,9 +221,9 @@ function Method({ H }) {
       <h3 className="sub-h">Method and limits</h3>
       <ul className="method">
         <li><b>Data:</b> 8.3 million NCAA women’s basketball shots, 2006–2026. Streaks count within one player’s game. Putbacks within 6 seconds are excluded.</li>
-        <li><b>Comparison:</b> each next shot is measured against the shooter’s own average, so good shooters don’t inflate the result.</li>
+        <li><b>Comparison:</b> each next shot is measured against the shooter’s own average for that kind of shot (free throw, 2, or 3), so good shooters don’t inflate the result.</li>
         <li><b>Chance:</b> every game’s shots were reshuffled {H.shuffles} times. The hot hand effect is the real gap minus the shuffled gap (Miller–Sanjurjo correction).</li>
-        <li><b>Limits:</b> defense and shot difficulty aren’t observed, and single players have too few streaks for firm conclusions.</li>
+        <li><b>Limits:</b> defense and shot difficulty aren’t observed. Views with fewer than 30 shots on either side are not scored, and single teams or players are too small for firm conclusions.</li>
       </ul>
       <p className="caption credit">By Yewon and Shinyoung for Purdue Love Data Week · Data: NCAA women’s basketball play-by-play</p>
     </>
