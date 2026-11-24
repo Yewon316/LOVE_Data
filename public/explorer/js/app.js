@@ -207,14 +207,21 @@ async function render() {
     : CELLS.filter(r => passes(r) && (state.team === "all" || r.team === +state.team));
   const byStreak = new Map(STREAKS.map(s => [s, sum(rows.filter(r => r.streak === s))]));
   const cmp = compare(rows, state.k);
-  const vol = groupOf(state.shot) === "FT" ? "fta" : "fga";
-  const nPlayers = d3.format(",")(only ? 1 : PLAYERS.filter(q => q[vol] > 0 && (state.team === "all" || q.tidx === +state.team)).length);
-
-  renderKpis(rows, cmp, nPlayers);
-  renderStreakChart(byStreak, cmp);
-
+  // Player-level data exists for a single team, so count the players whose shots pass the filters there.
+  // For "All teams" the data is grouped by team, so no player count is claimed.
   const pr = state.team === "all" ? TOP_ROWS : await teamRows(+state.team);
   if (tok !== token) return;
+  let who;
+  if (only) who = "1 player";
+  else if (state.team === "all") who = "All teams";
+  else {
+    const n = new Set(pr.filter(r => passes(r) && r.n > 0).map(r => r.player)).size;
+    who = `${d3.format(",")(n)} ${n === 1 ? "player" : "players"} (30+ career shots)`;
+  }
+
+  renderKpis(rows, cmp, who);
+  renderStreakChart(byStreak, cmp);
+
   d3.select("#players-hint").text(state.team === "all"
     ? "The 200 players with the most shots. Pick a team to see all of its players. Bigger dots took more shots. Small dots are mostly luck."
     : `Every ${CORE.teams[+state.team]} player with enough shots. Bigger dots took more shots. Small dots are mostly luck. Click a dot to see that player's games.`);
@@ -232,7 +239,7 @@ function renderKpis(rows, cmp, nPlayers) {
   const dir = cmp.effect > 0 ? "better" : "worse";
   const few = `Too few shots to tell: ${d3.format(",")(cmp.H.n || 0)} after ${mk}, ${d3.format(",")(cmp.M.n || 0)} after ${ms} (need ${MIN_SHOTS} each)`;
   const items = [
-    { name: "Shots in view", val: d3.format(",")(total), unit: "", note: `${nPlayers} players with 30+ shots, ${SHOT_WORD[state.shot]}` },
+    { name: "Shots in view", val: d3.format(",")(total), unit: "", note: `${nPlayers}, ${SHOT_WORD[state.shot]}` },
     { name: `After ${mk} vs. after ${ms}`, val: thin ? "–" : fmtPts(cmp.raw), unit: thin ? "" : "pts",
       note: thin ? "Too few shots to tell" : `Made ${fmtPct(cmp.H.pct)}% vs. ${fmtPct(cmp.M.pct)}% of next shots` },
     { name: "What chance alone gives", val: thin ? "–" : fmtPts(cmp.chance), unit: thin ? "" : "pts",
@@ -283,14 +290,23 @@ function renderStreakChart(byStreak, cmp) {
   xa.selectAll("text").style("fill", s => (s > 0 ? C.makeText : C.miss));
 
   const cx = s => x(s) + x.bandwidth() / 2;
-  const col = g.selectAll(".col").data(data.filter(d => d.n > 0)).join("g")
+  const shown = data.filter(d => d.n > 0 && !d.thin);
+  if (!shown.length) {
+    g.append("text").attr("class", "lbl").attr("text-anchor", "middle").attr("x", w / 2).attr("y", y(0) - 22)
+      .style("font-size", "14px").style("paint-order", "stroke").style("stroke", "#fff").style("stroke-width", "6px")
+      .text("Not enough shots with these filters");
+  }
+  else if (shown.length < data.filter(d => d.n > 0).length) {
+    g.append("text").attr("class", "lbl").attr("text-anchor", "end").attr("x", w).attr("y", -8)
+      .text(`Columns with fewer than ${MIN_SHOTS} shots are hidden`);
+  }
+  const col = g.selectAll(".col").data(shown).join("g")
     .on("mousemove", (e, d) => tip(e,
       `<b>${STREAK_LABEL[d.s]}${Math.abs(d.s) < 3 ? "" : ""} in a row</b><br>
        Next shot went in ${fmtPct(d.pct)}% of the time<br>
-       ${fmtPts(d.act)} pts vs. usual (chance: ${fmtPts(d.chance)})<br>${d3.format(",")(d.n)} shots${d.thin ? `<br><b>Too few shots to read (need ${MIN_SHOTS})</b>` : ""}`))
+       ${fmtPts(d.act)} pts vs. usual (chance: ${fmtPts(d.chance)})<br>${d3.format(",")(d.n)} shots`))
     .on("mouseleave", hideTip);
   col.append("rect").attr("x", d => x(d.s)).attr("width", x.bandwidth()).attr("y", 0).attr("height", h).attr("fill", "transparent");
-  col.attr("opacity", d => (d.thin ? 0.3 : 1));
   // chance marker
   col.append("line").attr("x1", d => cx(d.s) - 18).attr("x2", d => cx(d.s) + 18)
     .attr("y1", d => y(d.chance)).attr("y2", d => y(d.chance))
@@ -307,7 +323,7 @@ function renderStreakChart(byStreak, cmp) {
       .attr("fill", "#fff").attr("stroke", C.miss).attr("stroke-width", 3.5);
   });
   col.append("text").attr("class", "lbl strong").attr("text-anchor", "start")
-    .attr("x", d => cx(d.s) + 12).attr("y", d => y(d.act) + 4).text(d => (d.thin ? "few shots" : fmtPts(d.act)));
+    .attr("x", d => cx(d.s) + 12).attr("y", d => y(d.act) + 4).text(d => fmtPts(d.act));
 
   d3.select("#streak-title").text(`Next-shot accuracy after each streak, ${SHOT_WORD[state.shot]}`);
 }
