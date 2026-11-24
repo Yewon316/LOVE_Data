@@ -11,7 +11,10 @@ if mode=="prep":
     seq=np.unique(seqraw,return_inverse=True)[1].astype(np.int64)
     secs=d.secs.values.astype(float); gap=np.r_[np.nan,secs[:-1]-secs[1:]]
     same1=np.r_[False,seq[1:]==seq[:-1]]
-    putback=(d.ft.values==0)&same1&np.isfinite(gap)&(gap<=6)
+    # putback = a field goal 0-6 s after the same player's previous field goal IN THE SAME PERIOD
+    # (game clock values restart in overtime, so cross-period gaps can be negative and must not count)
+    per=d.period.values; same_per=np.r_[False,per[1:]==per[:-1]]
+    putback=(d.ft.values==0)&same1&same_per&np.isfinite(gap)&(gap>=0)&(gap<=6)
     # score margin before the shot
     diff=(d.hs-d.as_).values.astype(float)
     sign=np.where(d.team.values==d.home.values,1,-1)

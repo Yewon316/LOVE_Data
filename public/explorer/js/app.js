@@ -232,7 +232,7 @@ function renderKpis(rows, cmp, nPlayers) {
   const dir = cmp.effect > 0 ? "better" : "worse";
   const few = `Too few shots to tell: ${d3.format(",")(cmp.H.n || 0)} after ${mk}, ${d3.format(",")(cmp.M.n || 0)} after ${ms} (need ${MIN_SHOTS} each)`;
   const items = [
-    { name: "Shots in view", val: d3.format(",")(total), unit: "", note: `${nPlayers} players, ${SHOT_WORD[state.shot]}` },
+    { name: "Shots in view", val: d3.format(",")(total), unit: "", note: `${nPlayers} players with 30+ shots, ${SHOT_WORD[state.shot]}` },
     { name: `After ${mk} vs. after ${ms}`, val: thin ? "–" : fmtPts(cmp.raw), unit: thin ? "" : "pts",
       note: thin ? "Too few shots to tell" : `Made ${fmtPct(cmp.H.pct)}% vs. ${fmtPct(cmp.M.pct)}% of next shots` },
     { name: "What chance alone gives", val: thin ? "–" : fmtPts(cmp.chance), unit: thin ? "" : "pts",
