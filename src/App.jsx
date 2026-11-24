@@ -96,7 +96,7 @@ function Game({ sits, onDone, onSkip }) {
     <div className="card">
       <div className="kicker">Your result</div>
       <div className="bignum">{correct}/{log.length}</div>
-      <p style={{ marginTop: 10 }}>After three makes you called a make <strong>{pct(rate(hotL, (l) => l.guess === 'make'), 0)}</strong> of the time; after three misses, <strong>{pct(rate(coldL, (l) => l.guess === 'make'), 0)}</strong>. {bTxt}</p>
+      <p style={{ marginTop: 10 }}>After three makes you called a make <strong>{pct(rate(hotL, (l) => l.guess === 'make'), 0)}</strong> of the time. After three misses, <strong>{pct(rate(coldL, (l) => l.guess === 'make'), 0)}</strong>. {bTxt}</p>
       <p>Ten shots are mostly luck. The answer from 8.3 million shots is on the page behind this window.</p>
       <div className="btn-row"><button className="btn primary" onClick={onSkip}>See the real answer</button><button className="btn" onClick={() => setPhase('intro')}>Play again</button></div>
     </div>
@@ -209,7 +209,7 @@ function Coach({ H }) {
       </div>
       <div className="rule">
         <div className="kicker">Decision rule</div>
-        <p>Pick shots and shooters by season-long accuracy and shot quality. A streak tells you what already happened; across 8.3 million shots it barely predicts what happens next.</p>
+        <p>Pick shots and shooters by season-long accuracy and shot quality. A streak tells you what already happened. Across 8.3 million shots it barely predicts what happens next.</p>
       </div>
     </>
   )
@@ -220,9 +220,9 @@ function Method({ H }) {
     <>
       <h3 className="sub-h">Method and limits</h3>
       <ul className="method">
-        <li><b>Data:</b> 8.3 million NCAA women’s basketball shots, 2006–2026. Streaks count within one player’s game; putbacks within 6 seconds are excluded.</li>
+        <li><b>Data:</b> 8.3 million NCAA women’s basketball shots, 2006–2026. Streaks count within one player’s game. Putbacks within 6 seconds are excluded.</li>
         <li><b>Comparison:</b> each next shot is measured against the shooter’s own average, so good shooters don’t inflate the result.</li>
-        <li><b>Chance:</b> every game’s shots were reshuffled {H.shuffles} times; the hot hand effect is the real gap minus the shuffled gap (Miller–Sanjurjo correction).</li>
+        <li><b>Chance:</b> every game’s shots were reshuffled {H.shuffles} times. The hot hand effect is the real gap minus the shuffled gap (Miller–Sanjurjo correction).</li>
         <li><b>Limits:</b> defense and shot difficulty aren’t observed, and single players have too few streaks for firm conclusions.</li>
       </ul>
       <p className="caption credit">By Yewon and Shinyoung for Purdue Love Data Week · Data: NCAA women’s basketball play-by-play</p>

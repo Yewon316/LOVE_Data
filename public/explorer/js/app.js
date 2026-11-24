@@ -212,8 +212,8 @@ async function render() {
   const pr = state.team === "all" ? TOP_ROWS : await teamRows(+state.team);
   if (tok !== token) return;
   d3.select("#players-hint").text(state.team === "all"
-    ? "The 200 players with the most shots. Pick a team to see all of its players. Bigger dots took more shots; small dots are mostly luck."
-    : `Every ${CORE.teams[+state.team]} player with enough shots. Bigger dots took more shots; small dots are mostly luck. Click a dot to see that player's games.`);
+    ? "The 200 players with the most shots. Pick a team to see all of its players. Bigger dots took more shots. Small dots are mostly luck."
+    : `Every ${CORE.teams[+state.team]} player with enough shots. Bigger dots took more shots. Small dots are mostly luck. Click a dot to see that player's games.`);
   renderPlayerChart(pr.filter(passes), P);
   renderDetail(p, pRows ? pRows.filter(passes) : [], pGames);
 }
