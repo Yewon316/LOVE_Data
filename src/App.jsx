@@ -55,7 +55,7 @@ function Game({ sits, onDone, onSkip }) {
         <button className="btn" onClick={() => start('slight')}>Maybe slightly</button>
         <button className="btn" onClick={() => start('no')}>No, it’s a myth</button>
       </div>
-      <p className="caption" style={{ marginTop: 14 }}>Then predict 10 real shots, each taken right after three makes or three misses in a row. <button className="linkbtn" onClick={onSkip}>Skip to the answer ↓</button></p>
+      <p className="caption" style={{ marginTop: 14 }}>Then predict 10 real shots, each taken right after three makes or three misses in a row.</p>
     </div>
   )
   if (phase === 'play') {
@@ -97,32 +97,43 @@ function Game({ sits, onDone, onSkip }) {
       <div className="kicker">Your result</div>
       <div className="bignum">{correct}/{log.length}</div>
       <p style={{ marginTop: 10 }}>After three makes you called a make <strong>{pct(rate(hotL, (l) => l.guess === 'make'), 0)}</strong> of the time; after three misses, <strong>{pct(rate(coldL, (l) => l.guess === 'make'), 0)}</strong>. {bTxt}</p>
-      <p>Ten shots are mostly luck. Here is what 8.3 million say.</p>
-      <div className="btn-row"><button className="btn" onClick={() => setPhase('intro')}>Play again</button></div>
+      <p>Ten shots are mostly luck. The answer from 8.3 million shots is on the page behind this window.</p>
+      <div className="btn-row"><button className="btn primary" onClick={onSkip}>See the real answer</button><button className="btn" onClick={() => setPhase('intro')}>Play again</button></div>
     </div>
   )
 }
 
-function Answer({ H, go }) {
+function Answer({ H }) {
   const ft = H.ft, fg = H.fg
   return (
-    <div className="answer" id="answer">
-      <div className="answer-grid">
-        <div className="stat ft">
-          <div className="stat-label">Free throws</div>
-          <div className="stat-num">{sgn(ft.effect)}<span>pts</span></div>
-          <div className="stat-verdict">Yes, a little</div>
-          <p>After three straight makes, players hit about one more free throw in a hundred than chance explains (± {ft.ci.toFixed(1)}).</p>
-        </div>
-        <div className="stat fg">
-          <div className="stat-label">Field goals</div>
-          <div className="stat-num">{sgn(fg.effect)}<span>pts</span></div>
-          <div className="stat-verdict">No</div>
-          <p>After three straight makes, field-goal accuracy is no higher than chance predicts (± {fg.ci.toFixed(1)}).</p>
-        </div>
+    <div className="answer-chips" id="answer">
+      <div className="chip ft">
+        <div className="chip-label">Free throws</div>
+        <div className="chip-num">{sgn(ft.effect)}<span>pts</span></div>
+        <div className="chip-verdict">Yes, a little</div>
       </div>
-      <p className="caption">Percentage points beyond chance: each shot is compared with the shooter’s own average, then with the same games reshuffled {H.shuffles} times. NCAA women’s basketball, 2006–2026, 8.3 million shots.</p>
-      <div className="btn-row"><button className="btn primary" onClick={() => go(1)}>Explore it yourself →</button></div>
+      <div className="chip fg">
+        <div className="chip-label">Field goals</div>
+        <div className="chip-num">{sgn(fg.effect)}<span>pts</span></div>
+        <div className="chip-verdict">No</div>
+      </div>
+      <p className="chip-note">How much better players shoot after three straight makes than after three straight misses, beyond what chance produces (± {ft.ci.toFixed(1)} and ± {fg.ci.toFixed(1)}).</p>
+    </div>
+  )
+}
+
+function GameModal({ sits, onClose }) {
+  useEffect(() => {
+    const k = (e) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', k); document.body.style.overflow = 'hidden'
+    return () => { window.removeEventListener('keydown', k); document.body.style.overflow = '' }
+  }, [onClose])
+  return (
+    <div className="modal-bg" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="modal" role="dialog" aria-modal="true" aria-label="Predict 10 real shots">
+        <button className="modal-x" onClick={onClose} aria-label="Close">×</button>
+        <Game sits={sits} onDone={() => {}} onSkip={onClose} />
+      </div>
     </div>
   )
 }
@@ -243,8 +254,8 @@ export default function App() {
   const [H, setH] = useState(null)
   const [sits, setSits] = useState(null)
   const [err, setErr] = useState(false)
-  const [showAnswer, setShowAnswer] = useState(false)
-  const readHash = () => { const n = parseInt((window.location.hash || '').replace(/\D/g, ''), 10); return n >= 1 && n <= 3 ? n - 1 : 0 }
+  const [game, setGame] = useState(false)
+  const readHash = () => { const n = parseInt((window.location.hash || '').replace(/\D/g, ''), 10); return n === 2 ? 1 : 0 }
   const [ch, setCh] = useState(readHash)
 
   useEffect(() => {
@@ -252,30 +263,19 @@ export default function App() {
       .then(([a, b]) => { setH(a); setSits(b) }).catch(() => setErr(true))
   }, [])
 
-  const CH = [
-    { t: 'The question', title: 'Is the hot hand real?' },
-    { t: 'Explore', title: 'Explore it yourself' },
-    { t: 'What it means', title: 'Why it fooled us, and what to do about it' },
-  ]
+  const CH = [{ t: 'Explore' }, { t: 'What it means' }]
   const go = useCallback((n) => {
-    const c = Math.max(0, Math.min(CH.length - 1, n))
+    const c = Math.max(0, Math.min(1, n))
     setCh(c)
     window.history.replaceState(null, '', '#' + (c + 1))
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [CH.length])
-
+  }, [])
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.target.closest && e.target.closest('input,textarea,select,iframe')) return
-      if (e.key === 'ArrowRight') go(ch + 1)
-      if (e.key === 'ArrowLeft') go(ch - 1)
-    }
     const onHash = () => setCh(readHash())
-    window.addEventListener('keydown', onKey); window.addEventListener('hashchange', onHash)
-    return () => { window.removeEventListener('keydown', onKey); window.removeEventListener('hashchange', onHash) }
-  }, [ch, go])
-
-  const reveal = () => { setShowAnswer(true); setTimeout(() => document.getElementById('answer')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60) }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+  const closeGame = useCallback(() => setGame(false), [])
 
   if (err) return <div className="wrap"><p style={{ paddingTop: 80 }}>Could not load the data files.</p></div>
   if (!H) return <div className="wrap"><p style={{ paddingTop: 80 }}>Loading 8.3 million shots…</p></div>
@@ -284,50 +284,57 @@ export default function App() {
     <div className="shell">
       <nav className="topnav" aria-label="Sections">
         <div className="topnav-in">
-          <button className="brand" onClick={() => go(0)}>Hot Hand</button>
+          <button className="brand" onClick={() => go(0)}><img src="./trophy.webp" alt="" />Hot Hand</button>
           <ol className="tabs">
             {CH.map((c, i) => (
-              <li key={i}><button aria-current={i === ch ? 'step' : undefined} className={i < ch ? 'seen' : ''} onClick={() => go(i)}>
+              <li key={i}><button aria-current={i === ch ? 'step' : undefined} onClick={() => go(i)}>
                 <span className="num">{i + 1}</span><span className="tlabel">{c.t}</span></button></li>
             ))}
           </ol>
         </div>
-        <div className="bar"><div style={{ width: `${((ch + 1) / CH.length) * 100}%` }} /></div>
       </nav>
 
-      {ch === 1 ? (
+      {ch === 0 ? (
         <main className="chapter wide" key={ch}>
-          <div className="wide-head">
-            <div className="kicker">02 / 03 · Explore</div>
-            <p className="lede-sm">Every number below is recomputed from the shots that pass your filters. Start with Purdue, a shot type, or a single player.</p>
+          <header className="hero">
+            <div className="hero-text">
+              <div className="kicker">NCAA women’s basketball · 8.3 million shots · 2006–2026</div>
+              <h1>Is the hot hand real?</h1>
+              <p className="lede">Do players shoot better right after a streak of makes, or is it a trick of the mind? Here is the answer, and every shot behind it.</p>
+              <Answer H={H} />
+              <div className="btn-row">
+                <button className="btn gold" onClick={() => setGame(true)}>🏀 Test your gut first (10 shots)</button>
+                <button className="btn" onClick={() => document.getElementById('explorer')?.scrollIntoView({ behavior: 'smooth' })}>Explore the data ↓</button>
+              </div>
+            </div>
+            <div className="hero-art" aria-hidden="true">
+              <div className="rays" />
+              <img src="./trophy.webp" alt="" width="420" height="420" />
+            </div>
+          </header>
+          <div className="wide-head" id="explorer">
+            <h2 className="explore-h">Explore it yourself</h2>
+            <p className="lede-sm">Every number is recomputed from the shots that pass your filters. Try Purdue, a shot type, or a single player.</p>
             <a className="linkbtn" href="./explorer/index.html" target="_blank" rel="noopener">Open full screen ↗</a>
           </div>
           <iframe className="explorer" src="./explorer/index.html" title="Hot Hand Explorer: filter 8.3 million shots by shot type, streak, score, half, team and player" />
         </main>
       ) : (
         <main className="wrap chapter" key={ch}>
-          <div className="kicker">{String(ch + 1).padStart(2, '0')} / 03 · {CH[ch].t}</div>
-          {ch === 0 ? <h1>{CH[0].title}</h1> : <h2>{CH[ch].title}</h2>}
-          {ch === 0 && <>
-            <p className="lede">Do players shoot better right after a streak of makes, or is it a trick of the mind? We tested every shot in 20 seasons of NCAA women’s basketball play-by-play.</p>
-            <Game sits={sits} onDone={reveal} onSkip={reveal} />
-            {showAnswer && <Answer H={H} go={go} />}
-          </>}
-          {ch === 2 && <>
-            <Why H={H} />
-            <Coach H={H} />
-            <Method H={H} />
-          </>}
+          <div className="kicker">What it means</div>
+          <h2>Why it fooled us, and what to do about it</h2>
+          <Why H={H} />
+          <Coach H={H} />
+          <Method H={H} />
         </main>
       )}
 
       <footer className="pager wrap">
-        <button className="btn" disabled={ch === 0} onClick={() => go(ch - 1)}>← {ch > 0 ? CH[ch - 1].t : 'Back'}</button>
-        <span className="hint">Use ← → keys</span>
-        {ch < CH.length - 1
-          ? <button className="btn primary" onClick={() => go(ch + 1)}>{CH[ch + 1].t} →</button>
-          : <button className="btn" onClick={() => go(0)}>Start over</button>}
+        {ch === 0
+          ? <><span /><button className="btn primary" onClick={() => go(1)}>What it means →</button></>
+          : <><button className="btn" onClick={() => go(0)}>← Explore</button><span /></>}
       </footer>
+      {game && <GameModal sits={sits} onClose={closeGame} />}
     </div>
   )
 }

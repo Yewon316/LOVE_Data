@@ -9,7 +9,8 @@
 
 const C = {
   ink: "#1d1d27", muted: "#6b6f7b", rule: "#e1e2e8", panel: "#f6f6f9",
-  make: "#DDCC77", makeEdge: "#b8a652", makeText: "#7a6a12", miss: "#332288", dot: "#9a9caa",
+  // trophy theme: made shot = basketball orange, missed shot = ribbon purple (validated pair for color-blind readers)
+  make: "#e2681e", makeEdge: "#a9480f", makeText: "#a3460f", miss: "#6b3fc4", dot: "#9a9caa",
 };
 const STREAKS = [-3, -2, -1, 1, 2, 3];
 const STREAK_LABEL = { "-3": "Missed 3+", "-2": "Missed 2", "-1": "Missed 1", 1: "Made 1", 2: "Made 2", 3: "Made 3+" };

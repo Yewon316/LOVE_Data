@@ -205,3 +205,24 @@ h1 { letter-spacing: 0.01em; }
   .games { grid-template-columns: 1fr; }
   .seg button { white-space: normal; }
 }
+
+/* =========================================================
+   Trophy theme (matches the site's main icon)
+   made shot = basketball orange, missed shot = ribbon purple,
+   scoreboard = deep purple, highlights = trophy gold
+   ========================================================= */
+:root {
+  --make: #e2681e;
+  --make-edge: #a9480f;
+  --make-text: #a3460f;
+  --miss: #6b3fc4;
+  --board: #22133a;
+  --board-text: #fff7e8;
+  --board-muted: #c4b5e0;
+  --gold: #f2b01e;
+}
+.bar .k-miss { border-color: #b49cf0; }
+.ball-ico path, .ball path { stroke: #4a1f05; }
+.bar { box-shadow: inset 0 -3px 0 var(--gold); }
+.badge.clear { background: var(--gold); color: #22133a; }
+.seg button.on { background: var(--board); color: var(--board-text); }
