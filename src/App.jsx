@@ -117,7 +117,6 @@ function Answer({ H }) {
         <div className="chip-num">{sgn(fg.effect)}<span>pts</span></div>
         <div className="chip-verdict">No</div>
       </div>
-      <p className="chip-note">How much better players shoot after three straight makes than after three straight misses, beyond what chance produces (± {ft.ci.toFixed(1)} and ± {fg.ci.toFixed(1)}).</p>
     </div>
   )
 }
@@ -297,16 +296,14 @@ export default function App() {
       {ch === 0 ? (
         <main className="chapter wide" key={ch}>
           <header className="hero">
-            <div className="hero-text">
-              <div className="kicker">NCAA women’s basketball · 8.3 million shots · 2006–2026</div>
-              <h1>Is the hot hand real?</h1>
-              <p className="lede">Do players shoot better right after a streak of makes, or is it a trick of the mind? Here is the answer, and every shot behind it.</p>
-              <div className="btn-row">
-                <button className="btn gold" onClick={() => setGame(true)}>🏀 Test your gut first (10 shots)</button>
-                <button className="btn" onClick={() => document.getElementById('explorer')?.scrollIntoView({ behavior: 'smooth' })}>Explore the data ↓</button>
-              </div>
-            </div>
+            <div className="kicker">NCAA women’s basketball · 8.3 million shots · 2006–2026</div>
+            <h1>Is the hot hand real?</h1>
+            <p className="lede">Do players shoot better right after a streak of makes, or is it a trick of the mind? Here is the answer, and every shot behind it.</p>
             <Answer H={H} />
+            <div className="btn-row">
+              <button className="btn gold" onClick={() => setGame(true)}>🏀 Test your gut first (10 shots)</button>
+              <button className="btn" onClick={() => document.getElementById('explorer')?.scrollIntoView({ behavior: 'smooth' })}>Explore the data ↓</button>
+            </div>
           </header>
           <div className="wide-head" id="explorer">
             <h2 className="explore-h">Explore it yourself</h2>

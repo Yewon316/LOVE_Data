@@ -348,3 +348,21 @@ iframe.explorer { height: max(960px, calc(100vh - 90px)); }
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; align-items: start; }
 }
+
+/* hero v3: one left-aligned column, answer shown as plain numbers (no boxes) */
+.hero { display: block; max-width: 1480px; margin: 0 auto 26px; padding: 18px 4px 0; }
+.hero .lede { max-width: 720px; margin-bottom: 14px; }
+.hero .answer-chips { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px 48px; margin: 0 0 18px; }
+.hero .chip { background: none; box-shadow: none; padding: 0; border: 0; overflow: visible; }
+.hero .chip-label { font-size: 12px; }
+.hero .chip-num { font-size: 46px; margin-top: 2px; }
+.hero .chip-verdict { font-size: 16px; }
+.hero .chip-note { flex-basis: 100%; max-width: 720px; margin-top: 4px; }
+
+/* hero v4: centered, flat gold button, no explainer line */
+.hero { text-align: center; padding-top: 28px; }
+.hero .lede { margin-left: auto; margin-right: auto; }
+.hero .answer-chips { justify-content: center; gap: 6px 64px; }
+.hero .btn-row { justify-content: center; }
+.btn.gold, .btn.gold:hover, .btn.gold:focus-visible { background: var(--gold); border-color: var(--gold); color: #2a1a00; box-shadow: none; }
+.btn.gold:hover, .btn.gold:focus-visible { background: #e3a30f; border-color: #e3a30f; }
