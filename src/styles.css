@@ -366,3 +366,7 @@ iframe.explorer { height: max(960px, calc(100vh - 90px)); }
 .hero .btn-row { justify-content: center; }
 .btn.gold, .btn.gold:hover, .btn.gold:focus-visible { background: var(--gold); border-color: var(--gold); color: #2a1a00; box-shadow: none; }
 .btn.gold:hover, .btn.gold:focus-visible { background: #e3a30f; border-color: #e3a30f; }
+ul.method { list-style: none; padding: 0; margin: 0; }
+ul.method li { font-size: 15.5px; color: var(--text-secondary); padding: 8px 0; }
+ul.method b { color: var(--text-primary); }
+.credit { margin-top: 18px; }

@@ -219,31 +219,13 @@ function Method({ H }) {
   return (
     <>
       <h3 className="sub-h">Method and limits</h3>
-      <details><summary>Data</summary>
-        <ul>
-          <li>NCAA women’s basketball play-by-play, 2006–2026 seasons: 8.3 million made or missed shots, 42,936 players.</li>
-          <li>Streaks count only within one player’s shots in one game. Free throws and field goals are counted separately.</li>
-          <li>Field goals within 6 seconds of the same player’s previous shot (mostly putbacks after her own miss) are not counted as “next shots”; they are unusually easy and would fake a cold hand.</li>
-          <li>Halves: seasons before 2015–16 were played in halves, later seasons in quarters (Q1–2 = 1st half, Q3–4 = 2nd half). “Close” means the score was within 5 points when the shot was taken.</li>
-          <li>Teams with fewer than 1,000 counted shots (mostly non-Division I opponents) are grouped as “Other teams”.</li>
-        </ul>
-      </details>
-      <details><summary>Statistics</summary>
-        <ul>
-          <li>Each next shot is compared with the shooter’s own average for that kind of shot, so good shooters don’t inflate the result.</li>
-          <li>Chance baseline: each player’s makes and misses were reshuffled within the same game and shot type {H.shuffles} times, and the same comparison recomputed. This removes the Miller–Sanjurjo streak-selection bias.</li>
-          <li>Hot hand effect = real gap − chance gap. The ± range is a 95% interval from the binomial standard error; “Clear” means the effect is larger than that range.</li>
-        </ul>
-      </details>
-      <details><summary>Limitations</summary>
-        <ul>
-          <li>Pre-2020 seasons have thinner play-by-play coverage.</li>
-          <li>Defense, shot clock and lineups are not observed: this measures what follows a streak, not why.</li>
-          <li>Free throws in one trip are shot back to back, so “after a streak” partly means “later in the same trip”.</li>
-          <li>Single players have few streaks, so individual results are noisy. With millions of shots, tiny effects become statistically clear: judge the size, not only the label.</li>
-        </ul>
-      </details>
-      <p className="caption" style={{ marginTop: 18 }}>Built for the Boiler Up, Hammer Data Challenge (Purdue Love Data Week) by Yewon and Shinyoung. Data: NCAA women’s basketball play-by-play provided by the challenge. Analysis in Python (pandas, NumPy); visualization in React and D3.</p>
+      <ul className="method">
+        <li><b>Data:</b> 8.3 million NCAA women’s basketball shots, 2006–2026. Streaks count within one player’s game; putbacks within 6 seconds are excluded.</li>
+        <li><b>Comparison:</b> each next shot is measured against the shooter’s own average, so good shooters don’t inflate the result.</li>
+        <li><b>Chance:</b> every game’s shots were reshuffled {H.shuffles} times; the hot hand effect is the real gap minus the shuffled gap (Miller–Sanjurjo correction).</li>
+        <li><b>Limits:</b> defense and shot difficulty aren’t observed, and single players have too few streaks for firm conclusions.</li>
+      </ul>
+      <p className="caption credit">By Yewon and Shinyoung for Purdue Love Data Week · Data: NCAA women’s basketball play-by-play</p>
     </>
   )
 }
