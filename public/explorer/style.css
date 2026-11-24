@@ -242,3 +242,17 @@ h1 { letter-spacing: 0.01em; }
 .panel, .kpi, .kpi.main-kpi { border-radius: 0; }
 .kpi.main-kpi { box-shadow: none; }
 .bar { box-shadow: none; }
+
+/* player detail: never clip. More room, and each side scrolls on its own if needed. */
+@media (min-width: 1101px) {
+  .main { grid-template-rows: auto minmax(0, 1fr) 260px; }
+}
+@media (max-height: 820px) and (min-width: 1101px) {
+  .main { grid-template-rows: auto minmax(0, 1fr) 230px; }
+}
+#detail { overflow: hidden; }
+.detail-grid > div:first-child { overflow-y: auto; min-height: 0; padding-right: 4px; }
+.d-meta { margin-bottom: 8px; }
+.d-stats { row-gap: 8px; }
+/* no bar-style accents: drop the thick dark stripe between filters and results */
+.filters { border-right: 0; }
