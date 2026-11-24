@@ -61,8 +61,10 @@
     <div class="f"><label><span class="f-label">Team</span><select id="f-team"></select></label></div>
     <div class="f">
       <label for="f-player" class="f-label">Find a player (22,760 with 30+ shots)</label>
-      <input id="f-player" list="player-list" placeholder="Type a name">
-      <datalist id="player-list"></datalist>
+      <div class="suggest-wrap">
+        <input id="f-player" placeholder="Type the start of a name" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="player-suggest" aria-autocomplete="list">
+        <ul id="player-suggest" class="suggest" role="listbox" hidden></ul>
+      </div>
       <label class="check"><input type="checkbox" id="f-only"> Show only this player in the charts</label>
     </div>
     <button id="reset" class="reset">Reset all filters</button>

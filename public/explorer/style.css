@@ -226,3 +226,19 @@ h1 { letter-spacing: 0.01em; }
 .bar { box-shadow: inset 0 -3px 0 var(--gold); }
 .badge.clear { background: var(--gold); color: #22133a; }
 .seg button.on { background: var(--board); color: var(--board-text); }
+
+/* player search suggestions */
+.suggest-wrap { position: relative; }
+.suggest { position: absolute; left: 0; right: 0; top: 100%; z-index: 30; margin: 2px 0 0; padding: 0; list-style: none;
+  background: #fff; border: 1px solid var(--ink); max-height: 330px; overflow-y: auto; box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+.suggest li { padding: 7px 10px; font-size: 14px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.suggest li.opt { cursor: pointer; }
+.suggest li.opt:hover, .suggest li.active { background: var(--panel); }
+.suggest .nm b { font-weight: 800; }
+.suggest small { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 45%; }
+.suggest li.none { color: var(--muted); font-size: 13px; }
+
+/* flat cards: no rounded corners, no colored strips */
+.panel, .kpi, .kpi.main-kpi { border-radius: 0; }
+.kpi.main-kpi { box-shadow: none; }
+.bar { box-shadow: none; }

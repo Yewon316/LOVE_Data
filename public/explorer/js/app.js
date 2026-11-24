@@ -86,12 +86,46 @@ function setupFilters() {
   sel.on("change", function () { state.team = this.value; render(); });
 
   const label = p => `${p.name} (${p.team})`;
-  d3.select("#player-list").selectAll("option").data(PLAYERS).join("option").attr("value", label);
-  const byLabel = new Map(PLAYERS.map(p => [label(p), p.id]));
-  d3.select("#f-player").on("change input", function () {
-    const id = byLabel.get(this.value);
-    if (id || this.value === "") { state.player = id || null; render(); }
-  });
+  // Player search: only names that START with what was typed ("a" -> A..., "ad" -> Ad...)
+  const sorted = PLAYERS.slice().sort((a, b) => a.name.localeCompare(b.name));
+  const inp = d3.select("#f-player"), box = d3.select("#player-suggest");
+  const MAX = 12;
+  let matches = [], active = -1;
+  const hide = () => { box.attr("hidden", true); inp.attr("aria-expanded", "false"); active = -1; };
+  const pick = p => {
+    inp.property("value", label(p)); hide();
+    state.player = p.id; render();
+  };
+  const mark = () => box.selectAll("li.opt").classed("active", (d, i) => i === active)
+    .attr("aria-selected", (d, i) => (i === active ? "true" : "false"));
+  function suggest() {
+    const q = inp.property("value").trim().toLowerCase();
+    if (!q) { hide(); if (state.player) { state.player = null; render(); } return; }
+    matches = sorted.filter(p => p.name.toLowerCase().startsWith(q));
+    active = -1;
+    box.html("").attr("hidden", null); inp.attr("aria-expanded", "true");
+    if (!matches.length) { box.append("li").attr("class", "none").text(`No player name starts with “${inp.property("value").trim()}”`); return; }
+    matches.slice(0, MAX).forEach(p => {
+      const li = box.append("li").attr("class", "opt").attr("role", "option").datum(p)
+        .on("mousedown", e => { e.preventDefault(); pick(p); });
+      const nm = li.append("span").attr("class", "nm");
+      nm.append("b").text(p.name.slice(0, q.length));
+      nm.append("span").text(p.name.slice(q.length));
+      li.append("small").text(p.team);
+    });
+    if (matches.length > MAX) box.append("li").attr("class", "none").text(`${d3.format(",")(matches.length - MAX)} more. Keep typing to narrow it down.`);
+  }
+  inp.on("input", suggest)
+    .on("focus", () => { if (inp.property("value") && !state.player) suggest(); })
+    .on("blur", () => setTimeout(hide, 120))
+    .on("keydown", e => {
+      const n = Math.min(matches.length, MAX);
+      if (box.attr("hidden") !== null || !n) return;
+      if (e.key === "ArrowDown") { active = (active + 1) % n; mark(); e.preventDefault(); }
+      else if (e.key === "ArrowUp") { active = (active - 1 + n) % n; mark(); e.preventDefault(); }
+      else if (e.key === "Enter") { pick(matches[Math.max(active, 0)]); e.preventDefault(); }
+      else if (e.key === "Escape") hide();
+    });
   d3.select("#f-only").on("change", function () { state.only = this.checked; render(); });
 
   d3.select("#reset").on("click", () => {

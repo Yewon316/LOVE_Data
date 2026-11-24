@@ -315,3 +315,13 @@ iframe.explorer { box-shadow: 0 0 0 1px var(--grid), 0 10px 30px rgba(36, 18, 47
   .chip-num { font-size: 44px; }
 }
 @media (max-width: 760px) { .tabs .tlabel { display: inline; } .hero .kicker { font-size: 11.5px; } }
+
+/* flat cards: no rounded corners, no colored strips */
+.card, .stat, .chip, .modal, .rule, .result, .pcard, iframe.explorer, .cols3 .card, .timeline .card { border-radius: 0; }
+.chip::before { display: none; }
+.timeline .card, .cols3 .card { box-shadow: none; }
+.stat { border-top: 0; }
+.chip { box-shadow: 0 0 0 1.5px var(--grid); }
+.modal { box-shadow: 0 24px 60px rgba(0, 0, 0, .3); }
+.rule { border-radius: 0; }
+.topnav { border-bottom: 1px solid var(--grid); }
