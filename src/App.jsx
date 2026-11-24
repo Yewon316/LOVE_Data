@@ -301,16 +301,12 @@ export default function App() {
               <div className="kicker">NCAA women’s basketball · 8.3 million shots · 2006–2026</div>
               <h1>Is the hot hand real?</h1>
               <p className="lede">Do players shoot better right after a streak of makes, or is it a trick of the mind? Here is the answer, and every shot behind it.</p>
-              <Answer H={H} />
               <div className="btn-row">
                 <button className="btn gold" onClick={() => setGame(true)}>🏀 Test your gut first (10 shots)</button>
                 <button className="btn" onClick={() => document.getElementById('explorer')?.scrollIntoView({ behavior: 'smooth' })}>Explore the data ↓</button>
               </div>
             </div>
-            <div className="hero-art" aria-hidden="true">
-              <div className="rays" />
-              <img src="./trophy.webp" alt="" width="420" height="420" />
-            </div>
+            <Answer H={H} />
           </header>
           <div className="wide-head" id="explorer">
             <h2 className="explore-h">Explore it yourself</h2>
@@ -329,11 +325,11 @@ export default function App() {
         </main>
       )}
 
-      <footer className="pager wrap">
-        {ch === 0
-          ? <><span /><button className="btn primary" onClick={() => go(1)}>What it means →</button></>
-          : <><button className="btn" onClick={() => go(0)}>← Explore</button><span /></>}
-      </footer>
+      {ch === 1 && (
+        <footer className="pager wrap">
+          <button className="textlink" onClick={() => go(0)}>← Back to Explore</button>
+        </footer>
+      )}
       {game && <GameModal sits={sits} onClose={closeGame} />}
     </div>
   )
